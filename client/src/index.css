@@ -1,19 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --primary: #4F46E5; /* Indigo */
-  --primary-hover: #4338CA;
-  --secondary: #10B981; /* Emerald */
-  --accent: #F59E0B; /* Amber */
-  --bg-color: #0F172A; /* Slate 900 for modern dark mode */
-  --bg-secondary: #1E293B; /* Slate 800 */
-  --text-primary: #F8FAFC; /* Slate 50 */
-  --text-secondary: #CBD5E1; /* Slate 300 */
-  --border-color: #334155; /* Slate 700 */
+  --primary: #2c2c6c; /* Deep Navy Blue */
+  --primary-hover: #1f1f4d;
+  --secondary: #F5A623; /* Gold Accent */
+  --accent: #E91E63; /* Pink/Coral */
+  --whatsapp-green: #25D366; /* WhatsApp Green */
   
-  --glass-bg: rgba(30, 41, 59, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  --bg-color: #F5F5F5; /* Light Background */
+  --bg-secondary: #FFFFFF; /* Card Background */
+  --text-primary: #1A1A1A; /* Dark Gray/Black */
+  --text-secondary: #6B7280; /* Gray */
+  --text-white: #FFFFFF;
+  --border-color: #F5A623; /* Gold divider */
+  
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(245, 166, 35, 0.3);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
 
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Cpu } from 'lucide-react';
-import './Navbar.css'; // I will create a specific css file for this component if needed, or inline for now.
+import './Navbar.css'; 
+import mainCollegeImg from '../assets/images (2).jpg';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +15,7 @@ const Navbar = () => {
     { name: 'About', path: '/about' },
     { name: 'Academics', path: '/academics' },
     { name: 'Faculty', path: '/faculty' },
+    { name: 'Student Achievements', path: '/student-achievements' },
     { name: 'Placements', path: '/placements' },
   ];
 
@@ -22,7 +24,7 @@ const Navbar = () => {
       <div className="container navbar">
         <Link to="/" className="logo">
           <Cpu className="logo-icon" size={32} />
-          <span className="logo-text gradient-text">ECE Dept</span>
+          <span className="logo-text gradient-text">Department of Electronics and Communication Engineering</span>
         </Link>
 
         {/* Desktop Menu */}
@@ -39,6 +41,16 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
+          <a 
+            href="https://www.easacollege.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="main-college-link"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
+            <img src={mainCollegeImg} alt="EASA College" style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }} />
+            College Website
+          </a>
         </nav>
 
         {/* Mobile Toggle */}
@@ -62,6 +74,18 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
+          <div style={{ marginTop: '1.5rem' }}>
+            <a 
+              href="https://www.easacollege.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="main-college-link"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+            >
+              <img src={mainCollegeImg} alt="EASA College" style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }} />
+              College Website
+            </a>
+          </div>
         </div>
       )}
     </header>

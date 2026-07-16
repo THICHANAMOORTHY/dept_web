@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="footer-section">
           <Link to="/" className="logo">
             <Cpu className="logo-icon" size={32} />
-            <span className="logo-text gradient-text">ECE Dept</span>
+            <span className="logo-text gradient-text">Department of Electronics and Communication Engineering</span>
           </Link>
           <p className="footer-desc">
             Empowering the next generation of engineers with cutting-edge technology and world-class education.
@@ -24,10 +24,10 @@ const Footer = () => {
         <div className="footer-section">
           <h3>Quick Links</h3>
           <ul className="footer-links">
-            <li><Link to="/about">About Us</Link></li>
-            <li><Link to="/academics">Academics</Link></li>
-            <li><Link to="/faculty">Faculty</Link></li>
-            <li><Link to="/placements">Placements</Link></li>
+            <li><a href="https://www.easacollege.com" target="_blank" rel="noopener noreferrer">EASA College Home</a></li>
+            <li><a href="https://www.easacollege.com/best-college-for-electronics-and-communication-engineering-in-coimbatore" target="_blank" rel="noopener noreferrer">ECE Program (Official Page)</a></li>
+            <li><a href="https://portal.easacollege.com" target="_blank" rel="noopener noreferrer">ERP Login</a></li>
+            <li><a href="https://www.easacollege.com/admission-enquiry-for-engineering-colleges-in-coimbatore" target="_blank" rel="noopener noreferrer">Admission Enquiry</a></li>
           </ul>
         </div>
 
@@ -51,7 +51,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} ECE Department. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Department of Electronics and Communication Engineering. All rights reserved.</p>
       </div>
     </footer>
   );

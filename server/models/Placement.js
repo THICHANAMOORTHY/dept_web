@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const placementSchema = new mongoose.Schema({
   company: { type: String, required: true },
+  recruiterName: { type: String },
   package: { type: String, required: true },
   year: { type: Number, required: true },
   studentsPlaced: { type: Number, required: true },

@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 
@@ -14,14 +15,17 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const facultyRoutes = require('./routes/faculty.routes');
 const newsRoutes = require('./routes/news.routes');
 const placementRoutes = require('./routes/placement.routes');
+const adminRoutes = require('./routes/admin.routes');
 
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/placements', placementRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Routes (to be added)
 app.get('/', (req, res) => {

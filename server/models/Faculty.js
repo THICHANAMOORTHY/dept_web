@@ -10,6 +10,7 @@ const facultySchema = new mongoose.Schema({
   publications: [{ type: String }],
   researchInterests: [{ type: String }],
   isHOD: { type: Boolean, default: false },
+  displayOrder: { type: Number, default: 0 }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Faculty', facultySchema);

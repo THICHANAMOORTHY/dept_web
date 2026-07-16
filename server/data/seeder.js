@@ -46,8 +46,25 @@ const facultyData = [
 
 const newsData = [
   {
+    title: "5-Day Online FDP on AI-Based Signal Processing – Speech, Image and Wireless Data Intelligence",
+    content: "The Department of Electronics and Communication Engineering, EASA College of Engineering and Technology (Coimbatore), organized a 5-Day Online Faculty Development Programme (FDP) on \"AI-Based Signal Processing – Speech, Image and Wireless Data Intelligence,\" commencing 18 December 2025.\n\n[Add: resource persons/speakers, registration/participation details, and target audience — e.g. faculty/research scholars/students — once available]",
+    type: "announcement",
+    date: new Date("2025-12-18"),
+    category: "Faculty Development Program (FDP)",
+    shortDescription: "A 5-day online Faculty Development Program covering AI-based signal processing applications in speech, image, and wireless data intelligence, organized by the ECE Department, EASA College of Engineering and Technology, Coimbatore.",
+    published: true
+  },
+  {
+    title: "Important Update – GTT Foundation × Accenture Advanced EV Training Program",
+    content: "GTT Foundation – Accenture Advanced EV CSR Training Program begins 15 July 2026, conducted in two phases at the college campus and Chennai.",
+    type: "news",
+    date: new Date("2026-07-14"),
+    category: "Training & Placement",
+    shortDescription: "GTT Foundation – Accenture Advanced EV CSR Training Program begins 15 July 2026, conducted in two phases at the college campus and Chennai."
+  },
+  {
     title: "NBA Accreditation Renewed",
-    content: "The B.Tech ECE program has been accredited by NBA for another 3 years.",
+    content: "The B.E. ECE program has been accredited by NBA for another 3 years.",
     type: "news"
   },
   {
