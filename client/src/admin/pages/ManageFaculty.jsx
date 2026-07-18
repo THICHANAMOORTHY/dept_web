@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { getImageUrl } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -107,7 +107,7 @@ const ManageFaculty = () => {
     {
       header: 'Photo',
       accessor: 'imageUrl',
-      render: (row) => <img src={row.imageUrl ? `http://localhost:5000${row.imageUrl}` : 'https://via.placeholder.com/40'} alt={row.name} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+      render: (row) => <img src={getImageUrl(row.imageUrl)} alt={row.name} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
     },
     { header: 'Name', accessor: 'name' },
     { header: 'Designation', accessor: 'designation' },
@@ -148,7 +148,7 @@ const ManageFaculty = () => {
           <div style={{ padding: '1.5rem', flex: 1, overflowY: 'auto' }}>
             <form id="faculty-form" onSubmit={handleSubmit}>
               <ImageUploader 
-                currentImage={currentItem?.imageUrl ? `http://localhost:5000${currentItem.imageUrl}` : null} 
+                currentImage={currentItem?.imageUrl ? getImageUrl(currentItem.imageUrl) : null} 
                 onChange={setImageFile} 
               />
               

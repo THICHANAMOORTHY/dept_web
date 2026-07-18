@@ -5,7 +5,7 @@ const Faculty = require('../models/Faculty');
 // @access  Public
 const getFaculty = async (req, res) => {
   try {
-    const faculty = await Faculty.find();
+    const faculty = await Faculty.find().sort({ displayOrder: 1, createdAt: -1 });
     res.json(faculty);
   } catch (error) {
     res.status(500).json({ message: 'Server Error' });

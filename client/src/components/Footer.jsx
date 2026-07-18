@@ -28,6 +28,7 @@ const Footer = () => {
             <li><a href="https://www.easacollege.com/best-college-for-electronics-and-communication-engineering-in-coimbatore" target="_blank" rel="noopener noreferrer">ECE Program (Official Page)</a></li>
             <li><a href="https://portal.easacollege.com" target="_blank" rel="noopener noreferrer">ERP Login</a></li>
             <li><a href="https://www.easacollege.com/admission-enquiry-for-engineering-colleges-in-coimbatore" target="_blank" rel="noopener noreferrer">Admission Enquiry</a></li>
+            <li><Link to="/admin/login">Admin Login</Link></li>
           </ul>
         </div>
 

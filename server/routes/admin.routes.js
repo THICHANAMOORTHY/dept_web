@@ -29,11 +29,16 @@ const generateRoutes = (path, modelName) => {
 
 generateRoutes('faculty', 'Faculty');
 generateRoutes('news', 'News');
-generateRoutes('gallery', 'Gallery');
 generateRoutes('labs', 'Lab');
 generateRoutes('placements', 'Placement');
-generateRoutes('projects', 'Project');
+generateRoutes('achievements', 'Achievement');
 generateRoutes('enquiries', 'Enquiry'); // For enquiries, createItem isn't used by admin, but we keep the structure
+
+// Custom Activities Routes (multiple images)
+router.get('/activities', protectAdmin, getAll('Activity'));
+router.post('/activities', protectAdmin, upload.array('images', 10), createItem('Activity'));
+router.put('/activities/:id', protectAdmin, upload.array('images', 10), updateItem('Activity'));
+router.delete('/activities/:id', protectAdmin, deleteItem('Activity'));
 
 // Settings
 router.get('/settings', protectAdmin, getSettings);

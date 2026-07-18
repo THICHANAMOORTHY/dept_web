@@ -79,9 +79,11 @@
 }
 
 .footer-bottom {
-  border-top: 1px solid var(--border-color);
-  padding: 1.5rem 0;
+  border-top: 2px solid #fbdc8d; /* Match the golden/orange top border from the image */
+  border-bottom: 6px solid #111111; /* Thick black bottom border from the image */
+  background-color: #ffffff; /* White background */
+  padding: 1rem 0;
   text-align: center;
-  color: var(--text-secondary);
+  color: #6b7280; /* Gray text color */
   font-size: 0.875rem;
 }

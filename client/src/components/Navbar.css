@@ -9,7 +9,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px;
+  min-height: 80px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .logo {
@@ -19,9 +21,15 @@
 }
 
 .logo-text {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: -0.5px;
+}
+
+@media (min-width: 768px) {
+  .logo-text {
+    font-size: 1.5rem;
+  }
 }
 
 .desktop-nav {
@@ -117,6 +125,8 @@
   font-size: 1.25rem;
   font-weight: 500;
   color: var(--text-secondary);
+  display: block;
+  padding: 12px 20px;
 }
 
 .mobile-nav-link.active {

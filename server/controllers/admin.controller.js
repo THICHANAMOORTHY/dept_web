@@ -1,10 +1,10 @@
 const Admin = require('../models/Admin');
 const Faculty = require('../models/Faculty');
 const News = require('../models/News');
-const Gallery = require('../models/Gallery');
+const Activity = require('../models/Activity');
 const Lab = require('../models/Lab');
 const Placement = require('../models/Placement');
-const Project = require('../models/Project');
+const Achievement = require('../models/Achievement');
 const Enquiry = require('../models/Enquiry');
 const Setting = require('../models/Setting');
 const bcrypt = require('bcryptjs');
@@ -33,13 +33,13 @@ const getDashboardStats = async (req, res) => {
   try {
     const facultyCount = await Faculty.countDocuments();
     const newsCount = await News.countDocuments({ published: true });
-    const galleryCount = await Gallery.countDocuments();
+    const activityCount = await Activity.countDocuments();
     const enquiriesCount = await Enquiry.countDocuments({ status: 'New' });
 
     res.json({
       facultyCount,
       newsCount,
-      galleryCount,
+      activityCount,
       enquiriesCount,
       recentActivity: [] // placeholder for now
     });
@@ -50,7 +50,7 @@ const getDashboardStats = async (req, res) => {
 
 // Generic CRUD handlers
 const getModel = (modelName) => {
-  const models = { Faculty, News, Gallery, Lab, Placement, Project, Enquiry, Setting };
+  const models = { Faculty, News, Activity, Lab, Placement, Achievement, Enquiry, Setting };
   return models[modelName];
 };
 
@@ -67,10 +67,15 @@ const createItem = (modelName) => async (req, res) => {
   try {
     let data = { ...req.body };
     if (req.file) {
-      // Assuming all image fields are named differently based on model, but we can standardise on imageUrl or thumbnailUrl
       if (modelName === 'News') data.thumbnailUrl = `/uploads/${req.file.filename}`;
       else if (modelName === 'Placement') data.logoUrl = `/uploads/${req.file.filename}`;
       else data.imageUrl = `/uploads/${req.file.filename}`;
+    }
+    if (req.files && req.files.length > 0) {
+      if (modelName === 'Activity') {
+        data.images = req.files.map(file => `/uploads/${file.filename}`);
+        if (data.images.length > 0) data.imageUrl = data.images[0];
+      }
     }
     const item = await getModel(modelName).create(data);
     res.status(201).json(item);
@@ -86,6 +91,12 @@ const updateItem = (modelName) => async (req, res) => {
       if (modelName === 'News') data.thumbnailUrl = `/uploads/${req.file.filename}`;
       else if (modelName === 'Placement') data.logoUrl = `/uploads/${req.file.filename}`;
       else data.imageUrl = `/uploads/${req.file.filename}`;
+    }
+    if (req.files && req.files.length > 0) {
+      if (modelName === 'Activity') {
+        data.images = req.files.map(file => `/uploads/${file.filename}`);
+        if (data.images.length > 0) data.imageUrl = data.images[0];
+      }
     }
     const item = await getModel(modelName).findByIdAndUpdate(req.params.id, data, { new: true });
     res.json(item);

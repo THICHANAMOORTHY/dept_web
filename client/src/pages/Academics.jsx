@@ -1,60 +1,80 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getLabs, getImageUrl } from '../services/api';
 import './Page.css';
-import curriculumFile from '../assets/staff/ECE_R2024_Curriculum.txt';
+import curriculumFile from '../assets/staff/ECE_R2024_Curriculum.pdf';
 
-const labsData = [
+const fallbackLabsData = [
   {
     name: "Circuits and Devices Laboratory",
     description: "Foundation lab for studying the characteristics of basic electronic devices such as diodes, transistors, and semiconductors, building the groundwork for analog circuit design.",
     subjectsSupported: ["Basic Electronic Devices"],
     equipment: ["Multimeters", "DC power supplies", "Breadboards", "CRO", "Function generators"],
-    image: "/labs/lab_circuits_devices.png"
+    imageUrl: "/labs/lab_circuits_devices.png"
   },
   {
     name: "Analog and Digital Circuits Laboratory",
     description: "Hands-on design, construction, and testing of analog circuits (amplifiers, oscillators) and digital logic circuits (gates, flip-flops, counters).",
     subjectsSupported: ["Digital Electronics", "Analog Electronics"],
     equipment: ["Digital trainer kits", "IC trainer boards", "Oscilloscopes", "Signal generators"],
-    image: "/labs/lab_analog_digital.png"
+    imageUrl: "/labs/lab_analog_digital.png"
   },
   {
     name: "Circuits and Simulation Integrated Laboratory",
     description: "Simulation-based lab for verifying circuit behavior using EDA/CAD tools before hardware implementation, bridging theory and simulation.",
     subjectsSupported: ["Signals and Systems", "Circuit Theory"],
     equipment: ["PC workstations", "SPICE/MATLAB simulation software"],
-    image: "/labs/lab_simulation.png"
+    imageUrl: "/labs/lab_simulation.png"
   },
   {
     name: "Linear Integrated Circuits Laboratory",
     description: "Design and testing of op-amp based circuits including filters, oscillators, comparators, and instrumentation amplifiers.",
     subjectsSupported: ["Linear Integrated Circuits and Applications"],
     equipment: ["Op-amp ICs", "Trainer kits", "CRO", "Power supplies"],
-    image: "/labs/lab_linear_ic.png"
+    imageUrl: "/labs/lab_linear_ic.png"
   },
   {
     name: "Electrical Engineering and Control System Laboratory",
     description: "Practical exposure to control system modeling, stability analysis, and controller tuning alongside core electrical engineering principles.",
     subjectsSupported: ["Control System Engineering"],
     equipment: ["Control system trainer kits", "PID controllers", "Simulation software"],
-    image: "/labs/lab_control_system.png"
+    imageUrl: "/labs/lab_control_system.png"
   },
   {
     name: "Digital Signal Processing Laboratory",
     description: "Implementation of signal and image processing algorithms using DSP processors and simulation tools to reinforce theoretical DSP concepts.",
     subjectsSupported: ["Digital Signal Processing", "Digital Image Processing"],
     equipment: ["DSP trainer kits", "MATLAB", "Computers"],
-    image: "/labs/lab_dsp.png"
+    imageUrl: "/labs/lab_dsp.png"
   },
   {
     name: "Communication Systems Laboratory",
     description: "Hands-on experiments in analog and digital modulation techniques, giving students practical understanding of communication system design.",
     subjectsSupported: ["Analog and Digital Communications", "Wireless Communication"],
     equipment: ["AM/FM modulation trainer kits", "Digital modulation kits (ASK/FSK/PSK)", "CRO", "Spectrum analyzer"],
-    image: "/labs/lab_communication.png"
+    imageUrl: "/labs/lab_communication.png"
   }
 ];
 
 const Academics = () => {
+  const [labs, setLabs] = useState([]);
+  
+  useEffect(() => {
+    const fetchLabs = async () => {
+      try {
+        const { data } = await getLabs();
+        if (data && data.length > 0) {
+          setLabs(data);
+        } else {
+          setLabs(fallbackLabsData);
+        }
+      } catch (error) {
+        console.error('Error fetching labs:', error);
+        setLabs(fallbackLabsData);
+      }
+    };
+    fetchLabs();
+  }, []);
+
   return (
     <div className="page-container">
       <div className="page-header">
@@ -68,23 +88,23 @@ const Academics = () => {
         <section className="about-section mb-12">
           <h2>Department Overview</h2>
           <div className="card glass">
-            <h3 className="text-xl font-semibold mb-2">B.E. ECE - Regulations 2024 (R2024) - Choice Based Credit System</h3>
-            <p className="font-medium mb-6" style={{ color: 'var(--text-secondary)' }}>Total Program Credits: 164</p>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.5rem' }}>B.E. ECE - Regulations 2024 (R2024) - Choice Based Credit System</h3>
+            <p style={{ fontWeight: 500, marginBottom: '1.5rem', color: 'var(--text-secondary)' }}>Total Program Credits: 164</p>
             
-            <h4 className="text-xl font-bold mb-3 text-gradient" style={{ color: 'var(--primary-color)' }}>Vision</h4>
-            <p className="mb-6">
+            <h4 className="gradient-text" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.75rem' }}>Vision</h4>
+            <p style={{ marginBottom: '1.5rem' }}>
               To be a leading hub in Electronics and Communication Engineering, driving innovation, interdisciplinary collaboration, and socially impactful solutions through cutting-edge Education, Research and Entrepreneurship.
             </p>
 
-            <h4 className="text-xl font-bold mb-3 text-gradient" style={{ color: 'var(--primary-color)' }}>Mission</h4>
-            <ol className="list-decimal list-outside ml-5 space-y-2 mb-6">
+            <h4 className="gradient-text" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.75rem' }}>Mission</h4>
+            <ol style={{ listStyleType: 'decimal', paddingLeft: '1.5rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li>To advance knowledge and practice in Electronics and Communication Engineering through hands-on, industry-relevant education that prepares students for innovation, entrepreneurship and multidisciplinary collaboration.</li>
               <li>To foster a culture of research and development that addresses real-world challenges and creates transformative solutions at the intersection of Electronics, Communication and Computing.</li>
               <li>To empower individuals and communities by leveraging technology for positive social impact through inclusive education, collaborative outreach and interdisciplinary teamwork.</li>
             </ol>
 
-            <h4 className="text-xl font-bold mb-3 text-gradient" style={{ color: 'var(--primary-color)' }}>Program Educational Objectives (PEOs)</h4>
-            <ul className="list-none space-y-2">
+            <h4 className="gradient-text" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.75rem' }}>Program Educational Objectives (PEOs)</h4>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li><strong>PEO1.</strong> Graduates will have a thorough grounding in the fundamental sciences, facilitating future academic pursuits in ECE.</li>
               <li><strong>PEO2.</strong> Graduates will demonstrate expertise in ECE, empowering them to excel in industry applications, advanced studies, and research.</li>
               <li><strong>PEO3.</strong> Graduates will have a spirit of inquiry and learning, staying current with industry trends and technological breakthroughs.</li>
@@ -94,7 +114,7 @@ const Academics = () => {
           </div>
         </section>
 
-        <section className="about-section">
+        <section className="about-section mt-12">
           <h2>Undergraduate Program (B.E.)</h2>
           <div className="card glass mb-8">
             <h3>B.E. in Electronics and Communication Engineering</h3>
@@ -104,10 +124,10 @@ const Academics = () => {
               <li>Duration: 4 Years (8 Semesters)</li>
               <li>Accreditation: NBA Accredited</li>
             </ul>
-            <div className="mt-6">
+            <div className="mt-8">
               <h4>Core Subject Areas</h4>
-              <p className="mt-2 mb-2">ECE program enables students to get a strong foundation in various aspects of electronics and communication engineering as following:</p>
-              <ul className="grid grid-cols-2 gap-2 mt-2 list-disc list-inside">
+              <p style={{ marginTop: '0.5rem', marginBottom: '1rem' }}>ECE program enables students to get a strong foundation in various aspects of electronics and communication engineering as following:</p>
+              <ul style={{ listStyleType: 'disc', paddingLeft: '1.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '0.75rem', color: 'var(--text-secondary)' }}>
                 <li>Signals and Systems</li>
                 <li>Digital Electronics</li>
                 <li>Control System Engineering</li>
@@ -125,14 +145,14 @@ const Academics = () => {
               </ul>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-[var(--border-color)]">
+            <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
               <h4>B.E. ECE - Regulations 2024 (R2024)</h4>
-              <p className="mt-2 mb-4" style={{ color: 'var(--text-secondary)' }}>
+              <p style={{ marginTop: '0.5rem', marginBottom: '1rem', color: 'var(--text-secondary)' }}>
                 Total Program Credits: 164. The updated R2024 curriculum focuses on innovation, interdisciplinary collaboration, and industry readiness through a Choice Based Credit System.
               </p>
               
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-                <a href={curriculumFile} download="ECE_R2024_Curriculum.txt" className="btn btn-primary">
+              <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
+                <a href={curriculumFile} download="ECE_R2024_Curriculum.pdf" className="btn btn-primary">
                   Download Full Curriculum
                 </a>
                 <a href={curriculumFile} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
@@ -175,28 +195,34 @@ const Academics = () => {
 
         <section className="about-section mt-12">
           <h2>Laboratories & Facilities</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: '1.5rem', marginTop: '1.5rem' }}>
-            {labsData.map((lab, index) => (
+          <div className="grid grid-cols-1" style={{ gap: '1.5rem', marginTop: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '1.5rem' }}>
+            {labs.map((lab, index) => (
               <div key={index} className="card glass" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }}>
-                {lab.image && (
+                {lab.imageUrl && (
                   <div style={{ padding: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderBottom: '1px solid var(--border-color)' }}>
-                    <img src={lab.image} alt={lab.name} style={{ width: '100%', height: '180px', objectFit: 'contain' }} />
+                    <img src={getImageUrl(lab.imageUrl)} alt={lab.name} style={{ width: '100%', height: '180px', objectFit: 'contain' }} />
                   </div>
                 )}
                 <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                  <h3 className="text-lg font-bold mb-2 text-gradient" style={{ color: 'var(--primary-color)' }}>{lab.name}</h3>
-                  <p className="mb-4" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', flexGrow: 1 }}>{lab.description}</p>
-                  <div className="mt-2" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '0.75rem' }}>
-                    <h4 className="text-sm font-semibold mb-1">Subjects Supported:</h4>
-                    <p style={{ fontSize: '0.85rem' }}>{lab.subjectsSupported.join(', ')}</p>
+                  <h3 className="gradient-text" style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem' }}>{lab.name}</h3>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', flexGrow: 1, marginBottom: '1rem' }}>{lab.description}</p>
+                  <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '0.75rem', marginTop: '0.5rem' }}>
+                    <h4 style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}>Subjects Supported:</h4>
+                    <p style={{ fontSize: '0.85rem' }}>
+                      {Array.isArray(lab.subjectsSupported) ? lab.subjectsSupported.join(', ') : lab.subjectsSupported}
+                    </p>
                   </div>
-                  <div className="mt-2">
-                    <h4 className="text-sm font-semibold mb-1">Key Equipment:</h4>
-                    <p style={{ fontSize: '0.85rem' }}>{lab.equipment.join(', ')}</p>
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <h4 style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}>Key Equipment:</h4>
+                    <p style={{ fontSize: '0.85rem' }}>
+                      {Array.isArray(lab.equipment) ? lab.equipment.join(', ') : lab.equipment}
+                    </p>
                   </div>
                 </div>
               </div>
             ))}
+            </div>
           </div>
         </section>
 

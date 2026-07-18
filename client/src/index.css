@@ -29,11 +29,21 @@
   font-family: 'Outfit', sans-serif;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
   line-height: 1.6;
-  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 a {
@@ -51,9 +61,11 @@ ul {
 }
 
 .container {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 16px;
+  box-sizing: border-box;
 }
 
 /* Glassmorphism Utilities */
@@ -137,16 +149,18 @@ h1, h2, h3, h4, h5, h6 {
   gap: 2rem;
 }
 
-.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-cols-2, .grid-cols-3, .grid-cols-4 {
+  grid-template-columns: 1fr;
+}
 
-@media (max-width: 1024px) {
+@media (min-width: 768px) {
+  .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
   .grid-cols-3, .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 768px) {
-  .grid-cols-2, .grid-cols-3, .grid-cols-4 { grid-template-columns: 1fr; }
+@media (min-width: 1024px) {
+  .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
 }
 
 /* Cards */

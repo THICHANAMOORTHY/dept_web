@@ -12,12 +12,21 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
     { name: 'Academics', path: '/academics' },
     { name: 'Faculty', path: '/faculty' },
     { name: 'Student Achievements', path: '/student-achievements' },
     { name: 'Placements', path: '/placements' },
   ];
+
+  const isActive = (linkPath) => {
+    if (linkPath === '/') {
+      return location.pathname === '/' && !location.hash;
+    }
+    if (linkPath.startsWith('/#')) {
+      return location.pathname === '/' && location.hash === linkPath.substring(1);
+    }
+    return location.pathname === linkPath;
+  };
 
   return (
     <header className="navbar-container glass">
@@ -34,13 +43,14 @@ const Navbar = () => {
               <li key={link.name}>
                 <Link 
                   to={link.path} 
-                  className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
+                  className={`nav-link ${isActive(link.path) ? 'active' : ''}`}
                 >
                   {link.name}
                 </Link>
               </li>
             ))}
           </ul>
+
           <a 
             href="https://www.easacollege.com" 
             target="_blank" 
@@ -67,20 +77,21 @@ const Navbar = () => {
               <li key={link.name} onClick={toggleMenu}>
                 <Link 
                   to={link.path} 
-                  className={`mobile-nav-link ${location.pathname === link.path ? 'active' : ''}`}
+                  className={`mobile-nav-link ${isActive(link.path) ? 'active' : ''}`}
                 >
                   {link.name}
                 </Link>
               </li>
             ))}
           </ul>
-          <div style={{ marginTop: '1.5rem' }}>
+          <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
             <a 
               href="https://www.easacollege.com" 
               target="_blank" 
               rel="noopener noreferrer"
               className="main-college-link"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}
             >
               <img src={mainCollegeImg} alt="EASA College" style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }} />
               College Website

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFaculty } from '../services/api';
+import { getFaculty, getImageUrl } from '../services/api';
 import { Mail, Book } from 'lucide-react';
 import './Page.css';
 import sivakumarImg from '../assets/1.jpeg';
@@ -93,7 +93,7 @@ const Faculty = () => {
           <div className="faculty-grid">
             {facultyList.map(faculty => (
               <div key={faculty._id} className="card glass faculty-card animate-fade-in">
-                <img src={faculty.imageUrl} alt={faculty.name} className="faculty-image" />
+                <img src={getImageUrl(faculty.imageUrl)} alt={faculty.name} className="faculty-image" />
                 <h3>{faculty.name} {faculty.isHOD && '(HOD)'}</h3>
                 <p className="designation">{faculty.designation}</p>
                 <p className="specialization">{faculty.qualification}</p>

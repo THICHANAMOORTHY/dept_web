@@ -11,10 +11,10 @@ const AdminSidebar = () => {
     { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Faculty', path: '/admin/faculty', icon: Users },
     { name: 'News & Events', path: '/admin/news', icon: FileText },
-    { name: 'Gallery', path: '/admin/gallery', icon: ImageIcon },
+    { name: 'Department Activities', path: '/admin/activities', icon: ImageIcon },
     { name: 'Labs & Facilities', path: '/admin/labs', icon: Beaker },
     { name: 'Placements', path: '/admin/placements', icon: GraduationCap },
-    { name: 'Student Projects', path: '/admin/projects', icon: Trophy },
+    { name: 'Student Achievements', path: '/admin/achievements', icon: Trophy },
     { name: 'Enquiries', path: '/admin/enquiries', icon: MessageSquare },
     { name: 'Site Settings', path: '/admin/settings', icon: Settings },
   ];

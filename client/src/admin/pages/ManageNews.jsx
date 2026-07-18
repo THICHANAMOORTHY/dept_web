@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { getImageUrl } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -59,7 +59,7 @@ const ManageNews = () => {
   };
 
   const columns = [
-    { header: 'Thumbnail', accessor: 'thumbnailUrl', render: (row) => <img src={row.thumbnailUrl ? `http://localhost:5000${row.thumbnailUrl}` : 'https://via.placeholder.com/40'} alt="thumb" style={{ width: '40px', height: '40px', objectFit: 'cover' }} /> },
+    { header: 'Thumbnail', accessor: 'thumbnailUrl', render: (row) => <img src={getImageUrl(row.thumbnailUrl)} alt="thumb" style={{ width: '40px', height: '40px', objectFit: 'cover' }} /> },
     { header: 'Title', accessor: 'title' },
     { header: 'Category', accessor: 'category' },
     { header: 'Published', accessor: 'published', render: (row) => row.published ? 'Yes' : 'No' }
@@ -80,7 +80,7 @@ const ManageNews = () => {
           </div>
           <div style={{ padding: '1.5rem', flex: 1, overflowY: 'auto' }}>
             <form id="news-form" onSubmit={handleSubmit}>
-              <ImageUploader currentImage={currentItem?.thumbnailUrl ? `http://localhost:5000${currentItem.thumbnailUrl}` : null} onChange={setImageFile} />
+              <ImageUploader currentImage={currentItem?.thumbnailUrl ? getImageUrl(currentItem.thumbnailUrl) : null} onChange={setImageFile} />
               <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Title" required style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />
               <input type="text" name="category" value={formData.category} onChange={handleChange} placeholder="Category" style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />
               <textarea name="shortDescription" value={formData.shortDescription} onChange={handleChange} placeholder="Short Description" style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />
