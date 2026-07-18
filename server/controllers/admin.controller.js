@@ -150,6 +150,23 @@ const updateSettings = async (req, res) => {
   }
 };
 
+const updateCurriculum = async (req, res) => {
+  try {
+    let setting = await Setting.findOne();
+    if (!setting) setting = await Setting.create({});
+    
+    if (req.file) {
+      setting.curriculumPdfUrl = `/uploads/${req.file.filename}`;
+      await setting.save();
+      res.json(setting);
+    } else {
+      res.status(400).json({ message: 'No file uploaded' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 module.exports = {
   loginAdmin,
   getDashboardStats,
@@ -158,5 +175,6 @@ module.exports = {
   updateItem,
   deleteItem,
   getSettings,
-  updateSettings
+  updateSettings,
+  updateCurriculum
 };

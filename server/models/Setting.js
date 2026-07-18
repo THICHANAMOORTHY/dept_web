@@ -4,6 +4,7 @@ const settingSchema = new mongoose.Schema({
   heroBannerUrl: { type: String },
   studentFacultyRatio: { type: String },
   placementRatio: { type: String },
+  curriculumPdfUrl: { type: String },
   facultyCount: { type: String },
   rankingText: { type: String },
   phoneNumbers: [{ type: String }],

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, FileText, Image as ImageIcon, Beaker, GraduationCap, Trophy, MessageSquare, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, BookOpen, Image as ImageIcon, Beaker, GraduationCap, Trophy, MessageSquare, Settings, LogOut } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
 
@@ -11,6 +11,7 @@ const AdminSidebar = () => {
     { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Faculty', path: '/admin/faculty', icon: Users },
     { name: 'News & Events', path: '/admin/news', icon: FileText },
+    { name: 'Curriculum', path: '/admin/curriculum', icon: BookOpen },
     { name: 'Department Activities', path: '/admin/activities', icon: ImageIcon },
     { name: 'Labs & Facilities', path: '/admin/labs', icon: Beaker },
     { name: 'Placements', path: '/admin/placements', icon: GraduationCap },

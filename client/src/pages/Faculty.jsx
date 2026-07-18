@@ -7,48 +7,7 @@ import achImg1 from '../assets/faculty achivment/ECET is proud to announce that 
 import achImg2 from '../assets/faculty achivment/ECET is proud to announce that the Department of Electronics and Communication Engineering at EA (1).jpg.jpeg';
 import achImg3 from '../assets/faculty achivment/ECET is proud to announce that the Department of Electronics and Communication Engineering at EA (2).jpg.jpeg';
 
-const staticFacultyData = [
-  {
-    _id: '1',
-    name: "Dr. A. Sharma",
-    designation: "Professor & HOD",
-    qualification: "Ph.D. in VLSI Design",
-    specialization: "VLSI, Embedded Systems",
-    email: "hod.ece@dept.edu",
-    imageUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80",
-    isHOD: true
-  },
-  {
-    _id: '2',
-    name: "S. Sivakumar",
-    designation: "Asst Professor",
-    qualification: "",
-    specialization: "Electronic Devices",
-    email: "s.sivakumar@dept.edu",
-    imageUrl: sivakumarImg,
-    isHOD: false
-  },
-  {
-    _id: '3',
-    name: "Dr. B. Patel",
-    designation: "Associate Professor",
-    qualification: "Ph.D. in Signal Processing",
-    specialization: "DSP, Image Processing",
-    email: "b.patel@dept.edu",
-    imageUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80",
-    isHOD: false
-  },
-  {
-    _id: '4',
-    name: "Prof. C. Kumar",
-    designation: "Assistant Professor",
-    qualification: "M.Tech in Communication Systems",
-    specialization: "Wireless Communication",
-    email: "c.kumar@dept.edu",
-    imageUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80",
-    isHOD: false
-  }
-];
+
 
 const Faculty = () => {
   const [facultyList, setFacultyList] = useState([]);
@@ -60,12 +19,9 @@ const Faculty = () => {
         const { data } = await getFaculty();
         if (data && data.length > 0) {
           setFacultyList(data);
-        } else {
-          setFacultyList(staticFacultyData);
         }
       } catch (error) {
         console.error('Error fetching faculty:', error);
-        setFacultyList(staticFacultyData); // Fallback if backend is down
       } finally {
         setLoading(false);
       }
@@ -91,24 +47,28 @@ const Faculty = () => {
           </div>
         ) : (
           <div className="faculty-grid">
-            {facultyList.map(faculty => (
-              <div key={faculty._id} className="card glass faculty-card animate-fade-in">
-                <img src={getImageUrl(faculty.imageUrl)} alt={faculty.name} className="faculty-image" />
-                <h3>{faculty.name} {faculty.isHOD && '(HOD)'}</h3>
-                <p className="designation">{faculty.designation}</p>
-                <p className="specialization">{faculty.qualification}</p>
-                <p className="specialization mb-4">{faculty.specialization}</p>
-                
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem' }}>
-                  <a href={`mailto:${faculty.email}`} className="btn-secondary p-2" style={{ borderRadius: '50%' }} title="Email">
-                    <Mail size={18} />
-                  </a>
-                  <a href="#" className="btn-secondary p-2" style={{ borderRadius: '50%' }} title="Publications">
-                    <Book size={18} />
-                  </a>
+            {facultyList.length > 0 ? (
+              facultyList.map(faculty => (
+                <div key={faculty._id} className="card glass faculty-card animate-fade-in">
+                  <img src={getImageUrl(faculty.imageUrl)} alt={faculty.name} className="faculty-image" />
+                  <h3>{faculty.name} {faculty.isHOD && '(HOD)'}</h3>
+                  <p className="designation">{faculty.designation}</p>
+                  <p className="specialization">{faculty.qualification}</p>
+                  <p className="specialization mb-4">{faculty.specialization}</p>
+                  
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem' }}>
+                    <a href={`mailto:${faculty.email}`} className="btn-secondary p-2" style={{ borderRadius: '50%' }} title="Email">
+                      <Mail size={18} />
+                    </a>
+                    <a href="#" className="btn-secondary p-2" style={{ borderRadius: '50%' }} title="Publications">
+                      <Book size={18} />
+                    </a>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: 'var(--text-secondary)' }}>No faculty data available yet.</p>
+            )}
           </div>
         )}
       </div>

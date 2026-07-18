@@ -21,6 +21,7 @@ import ManageEnquiries from './admin/pages/ManageEnquiries';
 import SiteSettings from './admin/pages/SiteSettings';
 import ManageLabs from './admin/pages/ManageLabs';
 import ManageAchievements from './admin/pages/ManageAchievements';
+import ManageCurriculum from './admin/pages/ManageCurriculum';
 
 import FloatingWidget from './components/FloatingWidget';
 
@@ -55,6 +56,7 @@ function App() {
             <Route element={<AdminLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="faculty" element={<ManageFaculty />} />
+              <Route path="curriculum" element={<ManageCurriculum />} />
               <Route path="news" element={<ManageNews />} />
               <Route path="activities" element={<ManageActivities />} />
               <Route path="placements" element={<ManagePlacements />} />

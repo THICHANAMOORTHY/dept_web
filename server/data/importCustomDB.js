@@ -9,6 +9,7 @@ const Faculty = require('../models/Faculty');
 const News = require('../models/News');
 const Placement = require('../models/Placement');
 const Lab = require('../models/Lab');
+const Achievement = require('../models/Achievement');
 
 dotenv.config();
 connectDB();
@@ -23,6 +24,7 @@ const importCustomData = async () => {
     await News.deleteMany();
     await Placement.deleteMany();
     await Lab.deleteMany();
+    await Achievement.deleteMany();
 
     // Transform and Insert Faculty
     if (dbData.faculty) {
@@ -72,6 +74,16 @@ const importCustomData = async () => {
         equipments: []
       }));
       await Lab.insertMany(labDocs);
+    }
+
+    // Transform and Insert Achievements
+    if (dbData.achievements) {
+      const achievementDocs = dbData.achievements.map(a => ({
+        title: a.title,
+        description: a.description,
+        tags: a.icon ? [a.icon] : []
+      }));
+      await Achievement.insertMany(achievementDocs);
     }
 
     console.log('Custom Data from db.json Imported Successfully!');

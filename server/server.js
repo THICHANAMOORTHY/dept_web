@@ -23,6 +23,8 @@ const placementRoutes = require('./routes/placement.routes');
 const adminRoutes = require('./routes/admin.routes');
 const activityRoutes = require('./routes/activity.routes');
 const achievementRoutes = require('./routes/achievement.routes');
+const settingsRoutes = require('./routes/settings.routes');
+const labRoutes = require('./routes/lab.routes');
 
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/news', newsRoutes);
@@ -30,6 +32,8 @@ app.use('/api/placements', placementRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/activities', activityRoutes);
 app.use('/api/achievements', achievementRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/labs', labRoutes);
 
 // Routes (to be added)
 app.get('/', (req, res) => {
