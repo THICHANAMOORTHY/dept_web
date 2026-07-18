@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Depending on server port
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
   headers: {
     'Content-Type': 'application/json'
   }
@@ -26,7 +26,8 @@ export const getAchievements = () => api.get('/achievements');
 export const getImageUrl = (url) => {
   if (!url) return 'https://via.placeholder.com/400';
   if (url.startsWith('http') || url.startsWith('data:')) return url;
-  return `http://localhost:5000${url.startsWith('/') ? '' : '/'}${url}`;
+  const backendUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000';
+  return `${backendUrl}${url.startsWith('/') ? '' : '/'}${url}`;
 };
 
 export default api;
