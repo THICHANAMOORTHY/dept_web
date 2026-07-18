@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -54,6 +54,7 @@ function App() {
           <Route path="/admin/login" element={<Login />} />
           <Route path="/admin" element={<PrivateRoute />}>
             <Route element={<AdminLayout />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="faculty" element={<ManageFaculty />} />
               <Route path="curriculum" element={<ManageCurriculum />} />
