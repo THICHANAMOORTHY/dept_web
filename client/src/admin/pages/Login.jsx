@@ -17,7 +17,11 @@ const Login = () => {
       login(res.data.token);
       navigate('/admin/dashboard');
     } catch (err) {
-      setError('Invalid credentials');
+      if (err.message === 'Network Error' || err.code === 'ERR_NETWORK') {
+        setError(`Cannot reach server at: ${api.defaults.baseURL}. Did Vercel save the Env Var?`);
+      } else {
+        setError('Invalid credentials');
+      }
     }
   };
 
