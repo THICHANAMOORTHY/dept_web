@@ -55,7 +55,10 @@ const Login = () => {
             <input 
               type="text" 
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value.trim())}
+              autoCapitalize="none"
+              autoCorrect="off"
+              autoComplete="username"
               required
               style={{
                 width: '100%',
