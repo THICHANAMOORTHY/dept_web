@@ -118,3 +118,14 @@ model Setting {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
+
+model QuickLink {
+  id          String   @id @default(uuid()) @map("_id")
+  title       String
+  url         String
+  category    String?  @default("Important Links")
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

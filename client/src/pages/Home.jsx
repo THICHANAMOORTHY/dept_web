@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, Award, BookOpen, Users, Calendar, Briefcase, Cpu } from 'lucide-react';
-import { getNews, getImageUrl, getActivities } from '../services/api';
+import { ArrowRight, Award, BookOpen, Users, Calendar, Briefcase, Cpu, ExternalLink, Link as LinkIcon } from 'lucide-react';
+import { getNews, getImageUrl, getActivities, getLinks } from '../services/api';
 import './Home.css';
 import './Page.css';
 import { Link, useLocation } from 'react-router-dom';
@@ -9,7 +9,22 @@ import hodImg from '../assets/WhatsApp Image 2026-07-14 at 9.44.25 PM.jpeg';
 const Home = () => {
   const [news, setNews] = useState([]);
   const [activities, setActivities] = useState([]);
+  const [links, setLinks] = useState([]);
   const location = useLocation();
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      try {
+        const { data } = await getLinks();
+        if (data && data.length > 0) {
+          setLinks(data);
+        }
+      } catch (err) {
+        console.error('Error fetching links:', err);
+      }
+    };
+    fetchLinks();
+  }, []);
 
   useEffect(() => {
     if (location.hash) {
@@ -209,6 +224,52 @@ const Home = () => {
           )}
         </div>
       </section>
+
+      {/* Quick Links / Important Portals Section */}
+      {links.length > 0 && (
+        <section className="container" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
+          <div className="section-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '2rem' }}>
+            <h2><span className="gradient-text">Important Links</span> & Portals</h2>
+            <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>Access official forms, portals, and student resources</p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
+            {links.map((link) => (
+              <a
+                key={link._id}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card glass animate-fade-in"
+                style={{
+                  padding: '1.25rem 1.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  borderRadius: '12px'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div style={{ backgroundColor: 'rgba(44, 44, 108, 0.1)', padding: '0.65rem', borderRadius: '10px', color: '#2c2c6c' }}>
+                    <LinkIcon size={20} />
+                  </div>
+                  <div>
+                    <h4 style={{ margin: 0, fontSize: '1rem', color: 'var(--text-primary)', fontWeight: '600' }}>{link.title}</h4>
+                    {link.description && <p style={{ margin: '0.25rem 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{link.description}</p>}
+                    <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', fontWeight: '700', color: 'var(--primary-color)', marginTop: '0.25rem', display: 'inline-block' }}>
+                      {link.category || 'Important Link'}
+                    </span>
+                  </div>
+                </div>
+                <ExternalLink size={18} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* HOD Message Teaser */}
       <section className="hod-teaser-section">

@@ -35,7 +35,8 @@ generateRoutes('news', 'News');
 generateRoutes('labs', 'Lab');
 generateRoutes('placements', 'Placement');
 generateRoutes('achievements', 'Achievement');
-generateRoutes('enquiries', 'Enquiry'); // For enquiries, createItem isn't used by admin, but we keep the structure
+generateRoutes('enquiries', 'Enquiry');
+generateRoutes('links', 'QuickLink');
 
 // Custom Activities Routes (multiple images)
 router.get('/activities', protectAdmin, getAll('Activity'));

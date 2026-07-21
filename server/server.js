@@ -42,6 +42,7 @@ const activityRoutes = require('./routes/activity.routes');
 const achievementRoutes = require('./routes/achievement.routes');
 const settingsRoutes = require('./routes/settings.routes');
 const labRoutes = require('./routes/lab.routes');
+const linkRoutes = require('./routes/link.routes');
 
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/news', newsRoutes);
@@ -51,6 +52,7 @@ app.use('/api/activities', activityRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/labs', labRoutes);
+app.use('/api/links', linkRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
