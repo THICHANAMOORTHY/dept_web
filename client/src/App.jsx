@@ -22,6 +22,7 @@ import SiteSettings from './admin/pages/SiteSettings';
 import ManageLabs from './admin/pages/ManageLabs';
 import ManageAchievements from './admin/pages/ManageAchievements';
 import ManageCurriculum from './admin/pages/ManageCurriculum';
+import ChangePassword from './admin/pages/ChangePassword';
 
 import FloatingWidget from './components/FloatingWidget';
 
@@ -65,6 +66,7 @@ function App() {
               <Route path="enquiries" element={<ManageEnquiries />} />
               <Route path="settings" element={<SiteSettings />} />
               <Route path="labs" element={<ManageLabs />} />
+              <Route path="change-password" element={<ChangePassword />} />
             </Route>
           </Route>
         </Routes>

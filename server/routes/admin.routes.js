@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   loginAdmin,
+  changePassword,
   getDashboardStats,
   getAll,
   createItem,
@@ -16,6 +17,7 @@ const upload = require('../middleware/upload.middleware');
 
 // Auth
 router.post('/login', loginAdmin);
+router.put('/change-password', protectAdmin, changePassword);
 
 // Dashboard
 router.get('/dashboard', protectAdmin, getDashboardStats);
