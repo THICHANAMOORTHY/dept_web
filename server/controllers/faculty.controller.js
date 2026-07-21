@@ -1,14 +1,17 @@
-const Faculty = require('../models/Faculty');
+const { prisma } = require('../config/db');
 
 // @desc    Get all faculty
 // @route   GET /api/faculty
 // @access  Public
 const getFaculty = async (req, res) => {
   try {
-    const faculty = await Faculty.find().sort({ displayOrder: 1, createdAt: -1 });
+    const faculty = await prisma.faculty.findMany({
+      orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
+    });
     res.json(faculty);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    console.error('getFaculty error:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
 
@@ -17,18 +20,21 @@ const getFaculty = async (req, res) => {
 // @access  Public
 const getFacultyById = async (req, res) => {
   try {
-    const faculty = await Faculty.findById(req.params.id);
+    const faculty = await prisma.faculty.findUnique({
+      where: { id: req.params.id },
+    });
     if (faculty) {
       res.json(faculty);
     } else {
       res.status(404).json({ message: 'Faculty not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    console.error('getFacultyById error:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
 
 module.exports = {
   getFaculty,
-  getFacultyById
+  getFacultyById,
 };

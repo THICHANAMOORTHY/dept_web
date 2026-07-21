@@ -1,15 +1,13 @@
-const mongoose = require('mongoose');
+const { PrismaClient } = require('@prisma/client');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
-const Admin = require('../models/Admin');
 
 dotenv.config();
+const prisma = new PrismaClient();
 
 const seedAdmin = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/ece_elites');
-
-    const existingAdmin = await Admin.findOne({ username: 'admin' });
+    const existingAdmin = await prisma.admin.findUnique({ where: { username: 'admin' } });
     if (existingAdmin) {
       console.log('Admin user already exists');
       process.exit();
@@ -18,12 +16,14 @@ const seedAdmin = async () => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash('admin123', salt);
 
-    await Admin.create({
-      username: 'admin',
-      password: hashedPassword,
+    await prisma.admin.create({
+      data: {
+        username: 'admin',
+        password: hashedPassword,
+      },
     });
 
-    console.log('Admin user seeded successfully');
+    console.log('Admin user seeded successfully (username: admin, password: admin123)');
     process.exit();
   } catch (error) {
     console.error('Error seeding admin:', error);

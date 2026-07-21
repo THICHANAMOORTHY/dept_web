@@ -1,22 +1,61 @@
-const Admin = require('../models/Admin');
-const Faculty = require('../models/Faculty');
-const News = require('../models/News');
-const Activity = require('../models/Activity');
-const Lab = require('../models/Lab');
-const Placement = require('../models/Placement');
-const Achievement = require('../models/Achievement');
-const Enquiry = require('../models/Enquiry');
-const Setting = require('../models/Setting');
+const { prisma } = require('../config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
+// Helper to add _id alias to match frontend expectations (was MongoDB)
+const normalizeId = (item) => {
+  if (!item) return item;
+  if (Array.isArray(item)) return item.map(i => ({ ...i, _id: i.id }));
+  return { ...item, _id: item.id };
+};
+
+// Helper to get prisma model delegate (e.g. 'Faculty' -> prisma.faculty)
+const getPrismaModel = (modelName) => {
+  const key = modelName.charAt(0).toLowerCase() + modelName.slice(1);
+  return prisma[key];
+};
+
+// Helper to clean/convert fields for Prisma model requirements
+const sanitizeData = (modelName, bodyData) => {
+  const data = { ...bodyData };
+
+  // Remove undefined or invalid keys if needed
+  delete data._id;
+  delete data.__v;
+
+  // Convert numeric strings to integers if present
+  if (data.displayOrder !== undefined) data.displayOrder = parseInt(data.displayOrder) || 0;
+  if (data.year !== undefined && data.year !== null) data.year = parseInt(data.year) || undefined;
+  if (data.studentsPlaced !== undefined) data.studentsPlaced = parseInt(data.studentsPlaced) || 0;
+  if (data.isHOD !== undefined) data.isHOD = data.isHOD === 'true' || data.isHOD === true;
+  if (data.published !== undefined) data.published = data.published === 'true' || data.published === true;
+
+  // Ensure array fields parsed if sent as JSON string or string
+  const arrayFields = ['publications', 'researchInterests', 'equipmentList', 'subjectsSupported', 'studentNames', 'tags', 'phoneNumbers'];
+  arrayFields.forEach((field) => {
+    if (data[field] !== undefined) {
+      if (typeof data[field] === 'string') {
+        try {
+          data[field] = JSON.parse(data[field]);
+        } catch (e) {
+          data[field] = data[field].split(',').map((s) => s.trim()).filter(Boolean);
+        }
+      }
+    }
+  });
+
+  return data;
+};
 
 // Auth: Login
 const loginAdmin = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const admin = await Admin.findOne({ username });
+    const admin = await prisma.admin.findUnique({
+      where: { username },
+    });
     if (admin && (await bcrypt.compare(password, admin.password))) {
-      const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET || 'secret123', {
+      const token = jwt.sign({ id: admin.id }, process.env.JWT_SECRET || 'secret123', {
         expiresIn: '1d',
       });
       res.json({ token });
@@ -24,48 +63,48 @@ const loginAdmin = async (req, res) => {
       res.status(401).json({ message: 'Invalid credentials' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
 // Dashboard Stats
 const getDashboardStats = async (req, res) => {
   try {
-    const facultyCount = await Faculty.countDocuments();
-    const newsCount = await News.countDocuments({ published: true });
-    const activityCount = await Activity.countDocuments();
-    const enquiriesCount = await Enquiry.countDocuments({ status: 'New' });
+    const facultyCount = await prisma.faculty.count();
+    const newsCount = await prisma.news.count({ where: { published: true } });
+    const activityCount = await prisma.activity.count();
+    const enquiriesCount = await prisma.enquiry.count({ where: { status: 'New' } });
 
     res.json({
       facultyCount,
       newsCount,
       activityCount,
       enquiriesCount,
-      recentActivity: [] // placeholder for now
+      recentActivity: []
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('Stats error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
-};
-
-// Generic CRUD handlers
-const getModel = (modelName) => {
-  const models = { Faculty, News, Activity, Lab, Placement, Achievement, Enquiry, Setting };
-  return models[modelName];
 };
 
 const getAll = (modelName) => async (req, res) => {
   try {
-    const data = await getModel(modelName).find().sort({ createdAt: -1 });
-    res.json(data);
+    const model = getPrismaModel(modelName);
+    const data = await model.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json(normalizeId(data));
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error(`getAll ${modelName} error:`, error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
 const createItem = (modelName) => async (req, res) => {
   try {
-    let data = { ...req.body };
+    let data = sanitizeData(modelName, req.body);
     if (req.file) {
       if (modelName === 'News') data.thumbnailUrl = `/uploads/${req.file.filename}`;
       else if (modelName === 'Placement') data.logoUrl = `/uploads/${req.file.filename}`;
@@ -77,16 +116,18 @@ const createItem = (modelName) => async (req, res) => {
         if (data.images.length > 0) data.imageUrl = data.images[0];
       }
     }
-    const item = await getModel(modelName).create(data);
-    res.status(201).json(item);
+    const model = getPrismaModel(modelName);
+    const item = await model.create({ data });
+    res.status(201).json(normalizeId(item));
   } catch (error) {
+    console.error(`createItem ${modelName} error:`, error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
 const updateItem = (modelName) => async (req, res) => {
   try {
-    let data = { ...req.body };
+    let data = sanitizeData(modelName, req.body);
     if (req.file) {
       if (modelName === 'News') data.thumbnailUrl = `/uploads/${req.file.filename}`;
       else if (modelName === 'Placement') data.logoUrl = `/uploads/${req.file.filename}`;
@@ -98,72 +139,88 @@ const updateItem = (modelName) => async (req, res) => {
         if (data.images.length > 0) data.imageUrl = data.images[0];
       }
     }
-    const item = await getModel(modelName).findByIdAndUpdate(req.params.id, data, { new: true });
-    res.json(item);
+    const model = getPrismaModel(modelName);
+    const item = await model.update({
+      where: { id: req.params.id },
+      data,
+    });
+    res.json(normalizeId(item));
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error(`updateItem ${modelName} error:`, error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
 const deleteItem = (modelName) => async (req, res) => {
   try {
-    await getModel(modelName).findByIdAndDelete(req.params.id);
+    const model = getPrismaModel(modelName);
+    await model.delete({
+      where: { id: req.params.id }
+    });
     res.json({ message: 'Item removed' });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error(`deleteItem ${modelName} error:`, error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
 const getSettings = async (req, res) => {
   try {
-    let setting = await Setting.findOne();
+    let setting = await prisma.setting.findFirst();
     if (!setting) {
-      setting = await Setting.create({});
+      setting = await prisma.setting.create({ data: {} });
     }
-    res.json(setting);
+    res.json(normalizeId(setting));
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('getSettings error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
 const updateSettings = async (req, res) => {
   try {
-    let setting = await Setting.findOne();
+    let setting = await prisma.setting.findFirst();
+    let data = sanitizeData('Setting', req.body);
+
     if (req.file) {
-      req.body.heroBannerUrl = `/uploads/${req.file.filename}`;
-    }
-    
-    // Parse social links if sent as string
-    if (typeof req.body.socialLinks === 'string') {
-      req.body.socialLinks = JSON.parse(req.body.socialLinks);
+      data.heroBannerUrl = `/uploads/${req.file.filename}`;
     }
 
     if (setting) {
-      Object.assign(setting, req.body);
-      await setting.save();
+      setting = await prisma.setting.update({
+        where: { id: setting.id },
+        data,
+      });
     } else {
-      setting = await Setting.create(req.body);
+      setting = await prisma.setting.create({ data });
     }
     res.json(setting);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('updateSettings error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
 const updateCurriculum = async (req, res) => {
   try {
-    let setting = await Setting.findOne();
-    if (!setting) setting = await Setting.create({});
-    
+    let setting = await prisma.setting.findFirst();
+    if (!setting) {
+      setting = await prisma.setting.create({ data: {} });
+    }
+
     if (req.file) {
-      setting.curriculumPdfUrl = `/uploads/${req.file.filename}`;
-      await setting.save();
+      const curriculumPdfUrl = `/uploads/${req.file.filename}`;
+      setting = await prisma.setting.update({
+        where: { id: setting.id },
+        data: { curriculumPdfUrl },
+      });
       res.json(setting);
     } else {
       res.status(400).json({ message: 'No file uploaded' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('updateCurriculum error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 

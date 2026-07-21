@@ -1,14 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const Activity = require('../models/Activity');
+const { prisma } = require('../config/db');
 
 // Public route to get all activities
 router.get('/', async (req, res) => {
   try {
-    const activities = await Activity.find().sort({ createdAt: -1 });
+    const activities = await prisma.activity.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
     res.json(activities);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    console.error('get activities error:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
 

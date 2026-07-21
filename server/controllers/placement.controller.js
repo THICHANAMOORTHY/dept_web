@@ -1,11 +1,14 @@
-const Placement = require('../models/Placement');
+const { prisma } = require('../config/db');
 
 const getPlacements = async (req, res) => {
   try {
-    const placements = await Placement.find().sort('-year');
+    const placements = await prisma.placement.findMany({
+      orderBy: { year: 'desc' },
+    });
     res.json(placements);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    console.error('getPlacements error:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
 

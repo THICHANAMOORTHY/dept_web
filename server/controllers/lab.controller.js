@@ -1,14 +1,17 @@
-const Lab = require('../models/Lab');
+const { prisma } = require('../config/db');
 
 // @desc    Get all labs
 // @route   GET /api/labs
 // @access  Public
 const getLabs = async (req, res) => {
   try {
-    const labs = await Lab.find().sort({ displayOrder: 1, createdAt: -1 });
+    const labs = await prisma.lab.findMany({
+      orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
+    });
     res.json(labs);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    console.error('getLabs error:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
 
@@ -17,18 +20,21 @@ const getLabs = async (req, res) => {
 // @access  Public
 const getLabById = async (req, res) => {
   try {
-    const lab = await Lab.findById(req.params.id);
+    const lab = await prisma.lab.findUnique({
+      where: { id: req.params.id },
+    });
     if (lab) {
       res.json(lab);
     } else {
       res.status(404).json({ message: 'Lab not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    console.error('getLabById error:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
 
 module.exports = {
   getLabs,
-  getLabById
+  getLabById,
 };

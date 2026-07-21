@@ -1,13 +1,9 @@
-const mongoose = require('mongoose');
+const { PrismaClient } = require('@prisma/client');
 const dotenv = require('dotenv');
-const connectDB = require('../config/db');
 
-// Models
-const Faculty = require('../models/Faculty');
-const News = require('../models/News');
-const Placement = require('../models/Placement');
+dotenv.config();
+const prisma = new PrismaClient();
 
-// Mock Data
 const facultyData = [
   {
     name: "Dr. A. Sharma",
@@ -46,36 +42,28 @@ const facultyData = [
 
 const newsData = [
   {
-    title: "5-Day Online FDP on AI-Based Signal Processing – Speech, Image and Wireless Data Intelligence",
-    content: "The Department of Electronics and Communication Engineering, EASA College of Engineering and Technology (Coimbatore), organized a 5-Day Online Faculty Development Programme (FDP) on \"AI-Based Signal Processing – Speech, Image and Wireless Data Intelligence,\" commencing 18 December 2025.\n\n[Add: resource persons/speakers, registration/participation details, and target audience — e.g. faculty/research scholars/students — once available]",
+    title: "5-Day Online FDP on AI-Based Signal Processing",
+    content: "The Department of Electronics and Communication Engineering organized a 5-Day Online Faculty Development Programme (FDP).",
     type: "announcement",
     date: new Date("2025-12-18"),
     category: "Faculty Development Program (FDP)",
-    shortDescription: "A 5-day online Faculty Development Program covering AI-based signal processing applications in speech, image, and wireless data intelligence, organized by the ECE Department, EASA College of Engineering and Technology, Coimbatore.",
+    shortDescription: "A 5-day online Faculty Development Program covering AI-based signal processing.",
     published: true
   },
   {
-    title: "Important Update – GTT Foundation × Accenture Advanced EV Training Program",
-    content: "GTT Foundation – Accenture Advanced EV CSR Training Program begins 15 July 2026, conducted in two phases at the college campus and Chennai.",
+    title: "GTT Foundation × Accenture Advanced EV Training Program",
+    content: "Advanced EV CSR Training Program conducted in two phases at the college campus and Chennai.",
     type: "news",
     date: new Date("2026-07-14"),
     category: "Training & Placement",
-    shortDescription: "GTT Foundation – Accenture Advanced EV CSR Training Program begins 15 July 2026, conducted in two phases at the college campus and Chennai."
+    shortDescription: "EV CSR Training Program in two phases.",
+    published: true
   },
   {
     title: "NBA Accreditation Renewed",
     content: "The B.E. ECE program has been accredited by NBA for another 3 years.",
-    type: "news"
-  },
-  {
-    title: "International Conference on VLSI",
-    content: "Call for papers is now open for ICVLSI 2026. Submit your abstracts by August.",
-    type: "announcement"
-  },
-  {
-    title: "Alumni Meet 2026 Scheduled",
-    content: "Annual alumni meet will be held on December 15th.",
-    type: "announcement"
+    type: "news",
+    published: true
   }
 ];
 
@@ -103,23 +91,20 @@ const placementData = [
   }
 ];
 
-dotenv.config();
-connectDB();
-
 const importData = async () => {
   try {
-    await Faculty.deleteMany();
-    await News.deleteMany();
-    await Placement.deleteMany();
+    await prisma.faculty.deleteMany();
+    await prisma.news.deleteMany();
+    await prisma.placement.deleteMany();
 
-    await Faculty.insertMany(facultyData);
-    await News.insertMany(newsData);
-    await Placement.insertMany(placementData);
+    await prisma.faculty.createMany({ data: facultyData });
+    await prisma.news.createMany({ data: newsData });
+    await prisma.placement.createMany({ data: placementData });
 
-    console.log('Data Imported Successfully!');
+    console.log('Sample data imported successfully into database!');
     process.exit();
   } catch (error) {
-    console.error(`Error with data import: ${error.message}`);
+    console.error(`Error importing data: ${error.message}`);
     process.exit(1);
   }
 };

@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(uuid()) @map("_id")
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Faculty {
+  id                String   @id @default(uuid()) @map("_id")
+  name              String
+  designation       String
+  qualification     String
+  specialization    String
+  email             String
+  imageUrl          String?  @default("https://via.placeholder.com/150")
+  publications      String[]
+  researchInterests String[]
+  isHOD             Boolean  @default(false)
+  displayOrder      Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model News {
+  id               String   @id @default(uuid()) @map("_id")
+  title            String
+  content          String
+  date             DateTime @default(now())
+  type             String   @default("news")
+  category         String?
+  shortDescription String?
+  thumbnailUrl     String?
+  published        Boolean  @default(false)
+  link             String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Activity {
+  id          String   @id @default(uuid()) @map("_id")
+  title       String
+  imageUrl    String?
+  images      String[]
+  category    String?  @default("General")
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Lab {
+  id                String   @id @default(uuid()) @map("_id")
+  name              String
+  description       String?
+  imageUrl          String?
+  equipmentList     String[]
+  subjectsSupported String[]
+  displayOrder      Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Placement {
+  id             String   @id @default(uuid()) @map("_id")
+  company        String
+  recruiterName  String?
+  package        String
+  year           Int
+  studentsPlaced Int
+  logoUrl        String?  @default("https://via.placeholder.com/100")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Achievement {
+  id           String   @id @default(uuid()) @map("_id")
+  title        String
+  studentNames String[]
+  year         Int?
+  description  String?
+  imageUrl     String?
+  tags         String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Enquiry {
+  id        String   @id @default(uuid()) @map("_id")
+  name      String
+  email     String
+  phone     String?
+  message   String
+  status    String   @default("New")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Setting {
+  id                  String   @id @default(uuid()) @map("_id")
+  heroBannerUrl       String?
+  studentFacultyRatio String?
+  placementRatio      String?
+  curriculumPdfUrl    String?
+  facultyCount        String?
+  rankingText         String?
+  phoneNumbers        String[]
+  email               String?
+  address             String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}

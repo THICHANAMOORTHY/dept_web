@@ -1,11 +1,14 @@
-const News = require('../models/News');
+const { prisma } = require('../config/db');
 
 const getNews = async (req, res) => {
   try {
-    const news = await News.find().sort('-date');
+    const news = await prisma.news.findMany({
+      orderBy: { date: 'desc' },
+    });
     res.json(news);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    console.error('getNews error:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
 
