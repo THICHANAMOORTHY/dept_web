@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { getFaculty, getImageUrl } from '../services/api';
-import { Mail, Book } from 'lucide-react';
+import { Mail, Book, Search } from 'lucide-react';
 import './Page.css';
 import sivakumarImg from '../assets/1.jpeg';
 import achImg1 from '../assets/faculty achivment/ECET is proud to announce that the Department of Electronics and Communication Engineering at EA.jpg.jpeg';
 import achImg2 from '../assets/faculty achivment/ECET is proud to announce that the Department of Electronics and Communication Engineering at EA (1).jpg.jpeg';
 import achImg3 from '../assets/faculty achivment/ECET is proud to announce that the Department of Electronics and Communication Engineering at EA (2).jpg.jpeg';
 
-
-
 const Faculty = () => {
   const [facultyList, setFacultyList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('All');
 
   useEffect(() => {
     const fetchFaculty = async () => {
@@ -29,6 +29,20 @@ const Faculty = () => {
     fetchFaculty();
   }, []);
 
+  const filteredFaculty = facultyList.filter((faculty) => {
+    const matchesSearch =
+      faculty.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      faculty.designation?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      faculty.specialization?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      faculty.qualification?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    if (!matchesSearch) return false;
+
+    if (selectedFilter === 'HOD') return faculty.isHOD;
+    if (selectedFilter === 'Professors') return faculty.designation?.toLowerCase().includes('professor');
+    return true;
+  });
+
   return (
     <div className="page-container">
       <div className="page-header">
@@ -39,6 +53,51 @@ const Faculty = () => {
       </div>
 
       <div className="container">
+        {/* Search and Filter Controls */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem', alignItems: 'center' }}>
+          <div style={{ position: 'relative', width: '100%', maxWidth: '500px' }}>
+            <Search size={20} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
+            <input
+              type="text"
+              placeholder="Search by name, designation, or specialization..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.85rem 1rem 0.85rem 2.75rem',
+                borderRadius: '9999px',
+                border: '1px solid rgba(0,0,0,0.12)',
+                backgroundColor: 'white',
+                fontSize: '0.95rem',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                outline: 'none'
+              }}
+            />
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {['All', 'HOD', 'Professors'].map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setSelectedFilter(filter)}
+                style={{
+                  padding: '0.5rem 1.25rem',
+                  borderRadius: '9999px',
+                  border: '1px solid ' + (selectedFilter === filter ? 'var(--primary-color)' : '#e5e7eb'),
+                  backgroundColor: selectedFilter === filter ? 'var(--primary-color)' : 'white',
+                  color: selectedFilter === filter ? 'white' : '#374151',
+                  fontWeight: '600',
+                  fontSize: '0.875rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {filter === 'All' ? 'All Faculty' : filter === 'HOD' ? 'HOD Only' : 'Professors'}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {loading ? (
           <div className="faculty-grid">
             {[1, 2, 3, 4].map(i => (
@@ -47,8 +106,8 @@ const Faculty = () => {
           </div>
         ) : (
           <div className="faculty-grid">
-            {facultyList.length > 0 ? (
-              facultyList.map(faculty => (
+            {filteredFaculty.length > 0 ? (
+              filteredFaculty.map(faculty => (
                 <div key={faculty._id} className="card glass faculty-card animate-fade-in">
                   <img src={getImageUrl(faculty.imageUrl)} alt={faculty.name} className="faculty-image" />
                   <h3>{faculty.name} {faculty.isHOD && '(HOD)'}</h3>

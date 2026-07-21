@@ -107,12 +107,22 @@ const getDashboardStats = async (req, res) => {
     const activityCount = await prisma.activity.count();
     const enquiriesCount = await prisma.enquiry.count({ where: { status: 'New' } });
 
+    const recentFaculty = await prisma.faculty.findMany({ take: 3, orderBy: { createdAt: 'desc' }, select: { name: true, designation: true, createdAt: true } });
+    const recentNews = await prisma.news.findMany({ take: 3, orderBy: { createdAt: 'desc' }, select: { title: true, category: true, createdAt: true } });
+    const recentEnquiries = await prisma.enquiry.findMany({ take: 3, orderBy: { createdAt: 'desc' }, select: { name: true, message: true, createdAt: true } });
+
+    const recentActivity = [
+      ...recentFaculty.map(f => ({ type: 'Faculty Added', title: `${f.name} (${f.designation})`, time: f.createdAt })),
+      ...recentNews.map(n => ({ type: 'News Posted', title: n.title, time: n.createdAt })),
+      ...recentEnquiries.map(e => ({ type: 'New Enquiry', title: `From ${e.name}`, time: e.createdAt }))
+    ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 6);
+
     res.json({
       facultyCount,
       newsCount,
-      activityCount,
+      galleryCount: activityCount,
       enquiriesCount,
-      recentActivity: []
+      recentActivity
     });
   } catch (error) {
     console.error('Stats error:', error);
