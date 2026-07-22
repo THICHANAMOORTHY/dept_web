@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { getImageUrl } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -48,7 +48,7 @@ const ManagePlacements = () => {
   };
 
   const columns = [
-    { header: 'Logo', accessor: 'logoUrl', render: (row) => <img src={row.logoUrl ? `http://localhost:5000${row.logoUrl}` : 'https://via.placeholder.com/40'} alt="logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} /> },
+    { header: 'Logo', accessor: 'logoUrl', render: (row) => <img src={row.logoUrl ? getImageUrl(row.logoUrl) : 'https://via.placeholder.com/40'} alt="logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} /> },
     { header: 'Company', accessor: 'company' },
     { header: 'Recruiter Name', accessor: 'recruiterName' },
     { header: 'Package', accessor: 'package' },
@@ -71,7 +71,7 @@ const ManagePlacements = () => {
           </div>
           <div style={{ padding: '1.5rem', flex: 1, overflowY: 'auto' }}>
             <form id="placement-form" onSubmit={handleSubmit}>
-              <ImageUploader currentImage={currentItem?.logoUrl ? `http://localhost:5000${currentItem.logoUrl}` : null} onChange={setImageFile} />
+              <ImageUploader currentImage={currentItem?.logoUrl ? getImageUrl(currentItem.logoUrl) : null} onChange={setImageFile} />
               <input type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Company Name" required style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />
               <input type="text" name="recruiterName" value={formData.recruiterName} onChange={handleChange} placeholder="Recruiter Name" style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />
               <input type="text" name="package" value={formData.package} onChange={handleChange} placeholder="Package (e.g. 5 LPA)" required style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />

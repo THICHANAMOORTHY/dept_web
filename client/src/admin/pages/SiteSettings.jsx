@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { getImageUrl } from '../../services/api';
 import ImageUploader from '../components/ImageUploader';
 
 const SiteSettings = () => {
@@ -69,7 +69,7 @@ const SiteSettings = () => {
       <h2 style={{ marginTop: 0, marginBottom: '2rem' }}>Site Settings</h2>
       <form onSubmit={handleSubmit}>
         <h3>Hero Banner</h3>
-        <ImageUploader currentImage={currentHeroUrl ? `http://localhost:5000${currentHeroUrl}` : null} onChange={setImageFile} />
+        <ImageUploader currentImage={currentHeroUrl ? getImageUrl(currentHeroUrl) : null} onChange={setImageFile} />
         
         <h3>Statistics Strip</h3>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>

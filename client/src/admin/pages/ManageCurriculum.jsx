@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { getImageUrl } from '../../services/api';
 import { Upload } from 'lucide-react';
 
 const ManageCurriculum = () => {
@@ -43,7 +43,7 @@ const ManageCurriculum = () => {
       {currentUrl && (
         <div style={{ marginBottom: '2rem', padding: '1rem', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
           <h3 style={{ margin: '0 0 1rem 0' }}>Current Curriculum</h3>
-          <a href={`http://localhost:5000${currentUrl}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+          <a href={getImageUrl(currentUrl)} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
             View Current PDF
           </a>
         </div>

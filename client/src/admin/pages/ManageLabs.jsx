@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { getImageUrl } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -71,7 +71,7 @@ const ManageLabs = () => {
   };
 
   const columns = [
-    { header: 'Image', accessor: 'imageUrl', render: (row) => <img src={row.imageUrl ? `http://localhost:5000${row.imageUrl}` : 'https://via.placeholder.com/40'} alt="lab" style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} /> },
+    { header: 'Image', accessor: 'imageUrl', render: (row) => <img src={row.imageUrl ? getImageUrl(row.imageUrl) : 'https://via.placeholder.com/40'} alt="lab" style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} /> },
     { header: 'Lab Name', accessor: 'name' },
     { header: 'Description', accessor: 'description', render: (row) => <span title={row.description}>{row.description && row.description.length > 50 ? row.description.substring(0, 50) + '...' : row.description}</span> }
   ];
@@ -91,7 +91,7 @@ const ManageLabs = () => {
           </div>
           <div style={{ padding: '1.5rem', flex: 1, overflowY: 'auto' }}>
             <form id="lab-form" onSubmit={handleSubmit}>
-              <ImageUploader currentImage={currentItem?.imageUrl ? `http://localhost:5000${currentItem.imageUrl}` : null} onChange={setImageFile} />
+              <ImageUploader currentImage={currentItem?.imageUrl ? getImageUrl(currentItem.imageUrl) : null} onChange={setImageFile} />
               <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Lab Name" required style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />
               <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Lab Description" style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem', minHeight: '100px' }} />
               <input type="text" name="equipmentList" value={formData.equipmentList} onChange={handleChange} placeholder="Equipment Tags (comma separated)" style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />

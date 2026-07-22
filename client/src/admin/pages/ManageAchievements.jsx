@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api, { getImageUrl } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -68,7 +68,7 @@ const ManageAchievements = () => {
   };
 
   const columns = [
-    { header: 'Image', accessor: 'imageUrl', render: (row) => <img src={row.imageUrl ? `http://localhost:5000${row.imageUrl}` : 'https://via.placeholder.com/40'} alt="achievement" style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} /> },
+    { header: 'Image', accessor: 'imageUrl', render: (row) => <img src={row.imageUrl ? getImageUrl(row.imageUrl) : 'https://via.placeholder.com/40'} alt="achievement" style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} /> },
     { header: 'Achievement Title', accessor: 'title' },
     { header: 'Year', accessor: 'year' },
     { header: 'Students', accessor: 'studentNames', render: (row) => row.studentNames?.join(', ') }
@@ -89,7 +89,7 @@ const ManageAchievements = () => {
           </div>
           <div style={{ padding: '1.5rem', flex: 1, overflowY: 'auto' }}>
             <form id="project-form" onSubmit={handleSubmit}>
-              <ImageUploader currentImage={currentItem?.imageUrl ? `http://localhost:5000${currentItem.imageUrl}` : null} onChange={setImageFile} />
+              <ImageUploader currentImage={currentItem?.imageUrl ? getImageUrl(currentItem.imageUrl) : null} onChange={setImageFile} />
               <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Achievement Title" required style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />
               <input type="text" name="studentNames" value={formData.studentNames} onChange={handleChange} placeholder="Student Names (comma separated)" required style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />
               <input type="number" name="year" value={formData.year} onChange={handleChange} placeholder="Year" required style={{ width: '100%', padding: '0.75rem', marginBottom: '1rem' }} />

@@ -25,7 +25,7 @@ const Academics = () => {
       try {
         const { data } = await getSettings();
         if (data && data.curriculumPdfUrl) {
-          setCurriculumPdfUrl(`http://localhost:5000${data.curriculumPdfUrl}`);
+          setCurriculumPdfUrl(getImageUrl(data.curriculumPdfUrl));
         }
       } catch (err) {
         console.error('Error fetching settings:', err);
