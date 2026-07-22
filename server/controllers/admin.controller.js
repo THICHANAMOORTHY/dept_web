@@ -1,6 +1,8 @@
 const { prisma } = require('../config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const path = require('path');
+const { uploadToSupabase } = require('../config/supabase');
 
 // Helper to add _id alias to match frontend expectations (was MongoDB)
 const normalizeId = (item) => {
@@ -147,14 +149,20 @@ const createItem = (modelName) => async (req, res) => {
   try {
     let data = sanitizeData(modelName, req.body);
     if (req.file) {
-      if (modelName === 'News') data.thumbnailUrl = `/uploads/${req.file.filename}`;
-      else if (modelName === 'Placement') data.logoUrl = `/uploads/${req.file.filename}`;
-      else data.imageUrl = `/uploads/${req.file.filename}`;
+      const filename = `${req.file.fieldname}-${Date.now()}${path.extname(req.file.originalname)}`;
+      const publicUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
+      if (modelName === 'News') data.thumbnailUrl = publicUrl;
+      else if (modelName === 'Placement') data.logoUrl = publicUrl;
+      else data.imageUrl = publicUrl;
     }
     if (req.files && req.files.length > 0) {
       if (modelName === 'Activity') {
-        data.images = req.files.map(file => `/uploads/${file.filename}`);
-        if (data.images.length > 0) data.imageUrl = data.images[0];
+        const urls = await Promise.all(req.files.map(async (file) => {
+          const filename = `${file.fieldname}-${Date.now()}-${Math.random().toString(36).slice(2)}${path.extname(file.originalname)}`;
+          return uploadToSupabase(file.buffer, filename, file.mimetype);
+        }));
+        data.images = urls;
+        if (urls.length > 0) data.imageUrl = urls[0];
       }
     }
     const model = getPrismaModel(modelName);
@@ -170,14 +178,20 @@ const updateItem = (modelName) => async (req, res) => {
   try {
     let data = sanitizeData(modelName, req.body);
     if (req.file) {
-      if (modelName === 'News') data.thumbnailUrl = `/uploads/${req.file.filename}`;
-      else if (modelName === 'Placement') data.logoUrl = `/uploads/${req.file.filename}`;
-      else data.imageUrl = `/uploads/${req.file.filename}`;
+      const filename = `${req.file.fieldname}-${Date.now()}${path.extname(req.file.originalname)}`;
+      const publicUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
+      if (modelName === 'News') data.thumbnailUrl = publicUrl;
+      else if (modelName === 'Placement') data.logoUrl = publicUrl;
+      else data.imageUrl = publicUrl;
     }
     if (req.files && req.files.length > 0) {
       if (modelName === 'Activity') {
-        data.images = req.files.map(file => `/uploads/${file.filename}`);
-        if (data.images.length > 0) data.imageUrl = data.images[0];
+        const urls = await Promise.all(req.files.map(async (file) => {
+          const filename = `${file.fieldname}-${Date.now()}-${Math.random().toString(36).slice(2)}${path.extname(file.originalname)}`;
+          return uploadToSupabase(file.buffer, filename, file.mimetype);
+        }));
+        data.images = urls;
+        if (urls.length > 0) data.imageUrl = urls[0];
       }
     }
     const model = getPrismaModel(modelName);
@@ -224,7 +238,8 @@ const updateSettings = async (req, res) => {
     let data = sanitizeData('Setting', req.body);
 
     if (req.file) {
-      data.heroBannerUrl = `/uploads/${req.file.filename}`;
+      const filename = `hero-banner-${Date.now()}${path.extname(req.file.originalname)}`;
+      data.heroBannerUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
     }
 
     if (setting) {
@@ -250,7 +265,8 @@ const updateCurriculum = async (req, res) => {
     }
 
     if (req.file) {
-      const curriculumPdfUrl = `/uploads/${req.file.filename}`;
+      const filename = `curriculum-${Date.now()}${path.extname(req.file.originalname)}`;
+      const curriculumPdfUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
       setting = await prisma.setting.update({
         where: { id: setting.id },
         data: { curriculumPdfUrl },

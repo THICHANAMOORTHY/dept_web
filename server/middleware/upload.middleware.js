@@ -1,21 +1,5 @@
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
-
-// Ensure uploads directory exists
-const uploadDir = path.join(__dirname, '..', 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename(req, file, cb) {
-    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
-  }
-});
 
 function checkFileType(file, cb) {
   const filetypes = /jpg|jpeg|png|webp|gif|pdf/;
@@ -25,15 +9,17 @@ function checkFileType(file, cb) {
   if (extname && mimetype) {
     return cb(null, true);
   } else {
-    cb('Error: Images and PDFs only!');
+    cb(new Error('Error: Images and PDFs only!'));
   }
 }
 
+// Use memory storage — files will be uploaded to Supabase Storage, not disk
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
-  }
+  },
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
 });
 
 module.exports = upload;
