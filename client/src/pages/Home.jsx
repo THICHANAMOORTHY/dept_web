@@ -4,7 +4,7 @@ import { getNews, getImageUrl, getActivities, getLinks } from '../services/api';
 import './Home.css';
 import './Page.css';
 import { Link, useLocation } from 'react-router-dom';
-import hodImg from '../assets/WhatsApp Image 2026-07-14 at 9.44.25 PM.jpeg';
+import hodImg from '../assets/hero.png';
 
 const Home = () => {
   const [news, setNews] = useState([]);
@@ -317,51 +317,49 @@ const Home = () => {
                 <p className="mt-4">Department of Electronics and Communication Engineering has well-equipped laboratories. The faculty members of the department are experts in diversified fields. They are equipped with good research potential and are committed to the well-being of students. Students are encouraged to work on real-time projects and actively participate in technical conferences and workshops. The ECE program at EASA continually focuses on creating model students who can succeed in their chosen career path, contribute to their professional sector, and serve as role models for the community. Electronics and Communication Engineering has a good and consistent placement record with students placed in many industry-leading Core and IT organizations.</p>
               </div>
             </section>
-
-            <section className="about-section mt-12">
-              <h2>Department Activities</h2>
-
-              {/* Dynamic Admin Gallery */}
-              {activities.length > 0 ? (
-                <div className="card glass mt-8" style={{ padding: '2rem', marginBottom: '3rem' }}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: '2rem' }}>
-                    {activities.map((item, index) => (
-                      <div key={item._id || index} className="card glass animate-fade-in" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                        <div style={{ width: '100%', display: 'flex', overflowX: 'auto', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)', scrollSnapType: 'x mandatory' }}>
-                          {(item.images && item.images.length > 0 ? item.images : [item.imageUrl]).map((imgUrl, i) => (
-                            <img 
-                              key={i}
-                              src={getImageUrl(imgUrl)} 
-                              alt={`${item.title} ${i}`} 
-                              style={{ minWidth: '100%', height: 'auto', maxHeight: '250px', objectFit: 'contain', display: 'block', flexShrink: 0, scrollSnapAlign: 'start' }} 
-                            />
-                          ))}
-                        </div>
-                        <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                          <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>{item.title}</h4>
-                          {item.description && (
-                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', flex: 1 }}>
-                              {item.description}
-                            </p>
-                          )}
-                          {item.category && (
-                            <span style={{ display: 'inline-block', marginTop: '1rem', padding: '0.25rem 0.75rem', backgroundColor: 'rgba(56, 189, 248, 0.1)', color: 'var(--primary)', borderRadius: '1rem', fontSize: '0.8rem', fontWeight: 600, alignSelf: 'flex-start' }}>
-                              {item.category}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
-                  <p>More updates and activities coming soon.</p>
-                </div>
-              )}
-            </section>
           </div>
         </div>
+
+        {/* Dynamic Department Activities Section (Full-Width Desktop Container) */}
+        {activities.length > 0 && (
+          <section className="container" style={{ marginTop: '3rem', marginBottom: '4rem' }}>
+            <div className="section-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '3rem' }}>
+              <h2>Department <span className="gradient-text">Activities</span></h2>
+              <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem', fontSize: '1.1rem' }}>Highlights and glimpses of events conducted in our department</p>
+              <div className="section-line" style={{ marginTop: '1rem' }}></div>
+            </div>
+
+            <div className="grid grid-cols-3" style={{ gap: '2rem' }}>
+              {activities.map((item, index) => (
+                <div key={item._id || index} className="card glass animate-fade-in" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ width: '100%', display: 'flex', overflowX: 'auto', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)', scrollSnapType: 'x mandatory' }}>
+                    {(item.images && item.images.length > 0 ? item.images : [item.imageUrl]).map((imgUrl, i) => (
+                      <img 
+                        key={i}
+                        src={getImageUrl(imgUrl)} 
+                        alt={`${item.title} ${i}`} 
+                        style={{ minWidth: '100%', height: '300px', objectFit: 'cover', display: 'block', flexShrink: 0, scrollSnapAlign: 'start' }} 
+                      />
+                    ))}
+                  </div>
+                  <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>{item.title}</h4>
+                    {item.description && (
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', flex: 1 }}>
+                        {item.description}
+                      </p>
+                    )}
+                    {item.category && (
+                      <span style={{ display: 'inline-block', marginTop: '1rem', padding: '0.25rem 0.75rem', backgroundColor: 'rgba(56, 189, 248, 0.1)', color: 'var(--primary)', borderRadius: '1rem', fontSize: '0.8rem', fontWeight: 600, alignSelf: 'flex-start' }}>
+                        {item.category}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

@@ -10,7 +10,8 @@ const {
   deleteItem,
   getSettings,
   updateSettings,
-  updateCurriculum
+  updateCurriculum,
+  updatePlacementHighlight
 } = require('../controllers/admin.controller');
 const { protectAdmin } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload.middleware');
@@ -48,5 +49,6 @@ router.delete('/activities/:id', protectAdmin, deleteItem('Activity'));
 router.get('/settings', protectAdmin, getSettings);
 router.put('/settings', protectAdmin, upload.single('image'), updateSettings);
 router.post('/curriculum', protectAdmin, upload.single('curriculumPdf'), updateCurriculum);
+router.post('/placement-highlight', protectAdmin, upload.single('image'), updatePlacementHighlight);
 
 module.exports = router;

@@ -105,18 +105,22 @@ model Enquiry {
 }
 
 model Setting {
-  id                  String   @id @default(uuid()) @map("_id")
-  heroBannerUrl       String?
-  studentFacultyRatio String?
-  placementRatio      String?
-  curriculumPdfUrl    String?
-  facultyCount        String?
-  rankingText         String?
-  phoneNumbers        String[]
-  email               String?
-  address             String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                      String   @id @default(uuid()) @map("_id")
+  heroBannerUrl           String?
+  studentFacultyRatio     String?
+  placementRatio          String?
+  curriculumPdfUrl        String?
+  curriculumPdf2021Url    String?
+  placementHighlightUrl   String?
+  placementHighlightTitle String?
+  placementHighlightText  String?
+  facultyCount            String?
+  rankingText             String?
+  phoneNumbers            String[]
+  email                   String?
+  address                 String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }
 
 model QuickLink {

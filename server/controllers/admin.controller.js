@@ -108,15 +108,19 @@ const getDashboardStats = async (req, res) => {
     const newsCount = await prisma.news.count({ where: { published: true } });
     const activityCount = await prisma.activity.count();
     const enquiriesCount = await prisma.enquiry.count({ where: { status: 'New' } });
+    const achievementCount = await prisma.achievement.count();
+    const placementCount = await prisma.placement.count();
 
     const recentFaculty = await prisma.faculty.findMany({ take: 3, orderBy: { createdAt: 'desc' }, select: { name: true, designation: true, createdAt: true } });
     const recentNews = await prisma.news.findMany({ take: 3, orderBy: { createdAt: 'desc' }, select: { title: true, category: true, createdAt: true } });
     const recentEnquiries = await prisma.enquiry.findMany({ take: 3, orderBy: { createdAt: 'desc' }, select: { name: true, message: true, createdAt: true } });
+    const recentAchievements = await prisma.achievement.findMany({ take: 3, orderBy: { createdAt: 'desc' }, select: { title: true, createdAt: true } });
 
     const recentActivity = [
       ...recentFaculty.map(f => ({ type: 'Faculty Added', title: `${f.name} (${f.designation})`, time: f.createdAt })),
       ...recentNews.map(n => ({ type: 'News Posted', title: n.title, time: n.createdAt })),
-      ...recentEnquiries.map(e => ({ type: 'New Enquiry', title: `From ${e.name}`, time: e.createdAt }))
+      ...recentEnquiries.map(e => ({ type: 'New Enquiry', title: `From ${e.name}`, time: e.createdAt })),
+      ...recentAchievements.map(a => ({ type: 'Achievement Added', title: a.title, time: a.createdAt }))
     ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 6);
 
     res.json({
@@ -124,6 +128,8 @@ const getDashboardStats = async (req, res) => {
       newsCount,
       galleryCount: activityCount,
       enquiriesCount,
+      achievementCount,
+      placementCount,
       recentActivity
     });
   } catch (error) {
@@ -223,7 +229,17 @@ const getSettings = async (req, res) => {
   try {
     let setting = await prisma.setting.findFirst();
     if (!setting) {
-      setting = await prisma.setting.create({ data: {} });
+      setting = await prisma.setting.create({
+        data: {
+          address: 'NH-47, Palakkad Main Road, Navakkarai, Coimbatore, Tamil Nadu - 641105',
+          phoneNumbers: ['+91-9364445555', '0422-2656871'],
+          email: 'info@easacollege.com'
+        }
+      });
+    } else {
+      if (!setting.address) setting.address = 'NH-47, Palakkad Main Road, Navakkarai, Coimbatore, Tamil Nadu - 641105';
+      if (!setting.phoneNumbers || setting.phoneNumbers.length === 0) setting.phoneNumbers = ['+91-9364445555', '0422-2656871'];
+      if (!setting.email) setting.email = 'info@easacollege.com';
     }
     res.json(normalizeId(setting));
   } catch (error) {
@@ -265,11 +281,17 @@ const updateCurriculum = async (req, res) => {
     }
 
     if (req.file) {
-      const filename = `curriculum-${Date.now()}${path.extname(req.file.originalname)}`;
-      const curriculumPdfUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
+      const regulation = req.body.regulation || 'r2024';
+      const filename = `curriculum-${regulation}-${Date.now()}${path.extname(req.file.originalname)}`;
+      const uploadedUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
+
+      const updateData = regulation === 'r2021'
+        ? { curriculumPdf2021Url: uploadedUrl }
+        : { curriculumPdfUrl: uploadedUrl };
+
       setting = await prisma.setting.update({
         where: { id: setting.id },
-        data: { curriculumPdfUrl },
+        data: updateData,
       });
       res.json(setting);
     } else {
@@ -277,6 +299,36 @@ const updateCurriculum = async (req, res) => {
     }
   } catch (error) {
     console.error('updateCurriculum error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+const updatePlacementHighlight = async (req, res) => {
+  try {
+    let setting = await prisma.setting.findFirst();
+    if (!setting) {
+      setting = await prisma.setting.create({ data: {} });
+    }
+
+    const data = {};
+    if (req.body.title !== undefined) data.placementHighlightTitle = req.body.title;
+    if (req.body.text !== undefined) data.placementHighlightText = req.body.text;
+
+    if (req.file) {
+      const filename = `placement-highlight-${Date.now()}${path.extname(req.file.originalname)}`;
+      data.placementHighlightUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
+    }
+
+    if (Object.keys(data).length > 0) {
+      setting = await prisma.setting.update({
+        where: { id: setting.id },
+        data,
+      });
+    }
+
+    res.json(normalizeId(setting));
+  } catch (error) {
+    console.error('updatePlacementHighlight error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
@@ -291,5 +343,6 @@ module.exports = {
   deleteItem,
   getSettings,
   updateSettings,
-  updateCurriculum
+  updateCurriculum,
+  updatePlacementHighlight
 };

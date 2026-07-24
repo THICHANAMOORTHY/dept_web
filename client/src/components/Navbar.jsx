@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Cpu } from 'lucide-react';
 import './Navbar.css'; 
-import mainCollegeImg from '../assets/images (2).jpg';
+import mainCollegeImg from '../assets/hero.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

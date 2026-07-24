@@ -26,9 +26,14 @@ export const getLinks = () => api.get('/links');
 
 export const getImageUrl = (url) => {
   if (!url) return 'https://via.placeholder.com/400';
-  if (url.startsWith('http') || url.startsWith('data:')) return url;
-  const backendUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000';
-  return `${backendUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:') || url.startsWith('blob:')) {
+    return url;
+  }
+  const backendUrl = import.meta.env.VITE_API_URL
+    ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')
+    : 'http://localhost:5000';
+  const cleanPath = url.startsWith('/') ? url : `/${url}`;
+  return `${backendUrl}${cleanPath}`;
 };
 
 export default api;

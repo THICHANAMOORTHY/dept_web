@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { getFaculty, getImageUrl } from '../services/api';
 import { Mail, Book, Search } from 'lucide-react';
 import './Page.css';
-import sivakumarImg from '../assets/1.jpeg';
-import achImg1 from '../assets/faculty achivment/ECET is proud to announce that the Department of Electronics and Communication Engineering at EA.jpg.jpeg';
-import achImg2 from '../assets/faculty achivment/ECET is proud to announce that the Department of Electronics and Communication Engineering at EA (1).jpg.jpeg';
-import achImg3 from '../assets/faculty achivment/ECET is proud to announce that the Department of Electronics and Communication Engineering at EA (2).jpg.jpeg';
+import sivakumarImg from '../assets/hero.png';
+import achImg1 from '../assets/hero.png';
+import achImg2 from '../assets/hero.png';
+import achImg3 from '../assets/hero.png';
 
 const Faculty = () => {
   const [facultyList, setFacultyList] = useState([]);

@@ -31,8 +31,16 @@ app.use(cors({
   credentials: true,
 }));
 
+const fs = require('fs');
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(uploadsDir));
 
 const facultyRoutes = require('./routes/faculty.routes');
 const newsRoutes = require('./routes/news.routes');

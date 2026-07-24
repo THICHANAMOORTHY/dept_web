@@ -26,11 +26,11 @@ const ManageAchievements = () => {
     if (item) {
       setCurrentItem(item);
       setFormData({ 
-        title: item.title, 
-        studentNames: item.studentNames ? item.studentNames.join(', ') : '', 
+        title: item.title || '', 
+        studentNames: Array.isArray(item.studentNames) ? item.studentNames.join(', ') : (item.studentNames || ''), 
         year: item.year || '', 
         description: item.description || '', 
-        tags: item.tags ? item.tags.join(', ') : '' 
+        tags: Array.isArray(item.tags) ? item.tags.join(', ') : (item.tags || '') 
       });
     } else {
       setCurrentItem(null);
@@ -47,21 +47,14 @@ const ManageAchievements = () => {
     data.append('title', formData.title);
     data.append('year', formData.year);
     data.append('description', formData.description);
-    
-    formData.studentNames.split(',').forEach(item => {
-      const trimmed = item.trim();
-      if(trimmed) data.append('studentNames[]', trimmed);
-    });
-
-    formData.tags.split(',').forEach(item => {
-      const trimmed = item.trim();
-      if(trimmed) data.append('tags[]', trimmed);
-    });
+    data.append('studentNames', formData.studentNames);
+    data.append('tags', formData.tags);
 
     if (imageFile) data.append('image', imageFile);
     
     try {
-      if (currentItem) await api.put(`/admin/achievements/${currentItem._id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+      const itemId = currentItem?._id || currentItem?.id;
+      if (currentItem && itemId) await api.put(`/admin/achievements/${itemId}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
       else await api.post('/admin/achievements', data, { headers: { 'Content-Type': 'multipart/form-data' } });
       fetchAchievements(); setIsModalOpen(false);
     } catch (err) { console.error(err); }

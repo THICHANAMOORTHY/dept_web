@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import { Users, FileText, ImageIcon, MessageSquare, Clock, ArrowUpRight } from 'lucide-react';
+import { Users, FileText, ImageIcon, MessageSquare, Clock, Trophy } from 'lucide-react';
 
 const StatCard = ({ title, value, icon: Icon }) => (
   <div style={{
@@ -28,6 +28,7 @@ const Dashboard = () => {
     newsCount: 0,
     galleryCount: 0,
     enquiriesCount: 0,
+    achievementCount: 0,
     recentActivity: []
   });
 
@@ -52,7 +53,8 @@ const Dashboard = () => {
   const getBadgeColor = (type) => {
     if (type.includes('Faculty')) return { bg: '#e0e7ff', text: '#3730a3' };
     if (type.includes('News')) return { bg: '#dcfce7', text: '#166534' };
-    return { bg: '#fef3c7', text: '#92400e' };
+    if (type.includes('Achievement')) return { bg: '#fef3c7', text: '#92400e' };
+    return { bg: '#f3e8ff', text: '#6b21a8' };
   };
 
   return (
@@ -61,12 +63,13 @@ const Dashboard = () => {
       
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         gap: '1.5rem',
         marginBottom: '2rem'
       }}>
         <StatCard title="Total Faculty" value={stats.facultyCount} icon={Users} />
         <StatCard title="Published News/Events" value={stats.newsCount} icon={FileText} />
+        <StatCard title="Student Achievements" value={stats.achievementCount || 0} icon={Trophy} />
         <StatCard title="Gallery Images" value={stats.galleryCount} icon={ImageIcon} />
         <StatCard title="Pending Enquiries" value={stats.enquiriesCount} icon={MessageSquare} />
       </div>
