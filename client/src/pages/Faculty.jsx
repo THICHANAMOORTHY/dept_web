@@ -107,8 +107,8 @@ const Faculty = () => {
         ) : (
           <div className="faculty-grid">
             {filteredFaculty.length > 0 ? (
-              filteredFaculty.map(faculty => (
-                <div key={faculty._id} className="card glass faculty-card animate-fade-in">
+              filteredFaculty.map((faculty, index) => (
+                <div key={faculty._id || faculty.id || faculty.name || index} className="card glass faculty-card animate-fade-in">
                   <img src={getImageUrl(faculty.imageUrl)} alt={faculty.name} className="faculty-image" />
                   <h3>{faculty.name} {faculty.isHOD && '(HOD)'}</h3>
                   <p className="designation">{faculty.designation}</p>

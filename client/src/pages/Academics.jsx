@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Beaker } from 'lucide-react';
 import { getLabs, getImageUrl, getSettings } from '../services/api';
 import './Page.css';
 
