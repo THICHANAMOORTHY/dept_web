@@ -118,7 +118,15 @@ const Faculty = () => {
             {filteredFaculty.length > 0 ? (
               filteredFaculty.map((faculty, index) => (
                 <div key={faculty._id || faculty.id || faculty.name || index} className="card glass faculty-card animate-fade-in">
-                  <img src={getImageUrl(faculty.imageUrl)} alt={faculty.name} className="faculty-image" />
+                  <img
+                    src={getImageUrl(faculty.imageUrl)}
+                    alt={faculty.name}
+                    className="faculty-image"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80';
+                    }}
+                  />
                   <h3>{faculty.name} {faculty.isHOD && '(HOD)'}</h3>
                   <p className="designation">{faculty.designation}</p>
                   <p className="specialization">{faculty.qualification}</p>
@@ -186,6 +194,10 @@ const Faculty = () => {
                         objectFit: 'contain',
                         display: 'block',
                         borderRadius: '0.5rem'
+                      }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80';
                       }}
                     />
                   ) : (

@@ -26,13 +26,16 @@ export const getLinks = () => api.get('/links');
 export const getFacultyAchievements = () => api.get('/faculty-achievements');
 
 export const getImageUrl = (url) => {
-  if (!url) return 'https://via.placeholder.com/400';
+  if (!url) return 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80';
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:') || url.startsWith('blob:')) {
     return url;
   }
+  const defaultBase = typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+    ? window.location.origin
+    : 'http://localhost:5000';
   const backendUrl = import.meta.env.VITE_API_URL
     ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')
-    : 'http://localhost:5000';
+    : defaultBase;
   const cleanPath = url.startsWith('/') ? url : `/${url}`;
   return `${backendUrl}${cleanPath}`;
 };

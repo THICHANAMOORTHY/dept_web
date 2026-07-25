@@ -373,7 +373,11 @@ const Home = () => {
                         key={i}
                         src={getImageUrl(imgUrl)} 
                         alt={`${item.title} ${i}`} 
-                        style={{ minWidth: '100%', height: '300px', objectFit: 'cover', display: 'block', flexShrink: 0, scrollSnapAlign: 'start' }} 
+                        style={{ minWidth: '100%', height: '300px', objectFit: 'contain', display: 'block', flexShrink: 0, scrollSnapAlign: 'start' }} 
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80';
+                        }}
                       />
                     ))}
                   </div>
