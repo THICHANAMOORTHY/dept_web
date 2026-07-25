@@ -32,6 +32,24 @@ const sanitizeData = (modelName, bodyData) => {
   if (data.isHOD !== undefined) data.isHOD = data.isHOD === 'true' || data.isHOD === true;
   if (data.published !== undefined) data.published = data.published === 'true' || data.published === true;
 
+  // Handle Setting model socialLinks parsing & mapping
+  if (modelName === 'Setting') {
+    if (data.socialLinks !== undefined) {
+      try {
+        const social = typeof data.socialLinks === 'string' ? JSON.parse(data.socialLinks) : data.socialLinks;
+        if (social && typeof social === 'object') {
+          if (social.facebook !== undefined) data.facebookUrl = social.facebook;
+          if (social.twitter !== undefined) data.twitterUrl = social.twitter;
+          if (social.linkedin !== undefined) data.linkedinUrl = social.linkedin;
+          if (social.instagram !== undefined) data.instagramUrl = social.instagram;
+        }
+      } catch (e) {
+        console.error('Error parsing socialLinks:', e);
+      }
+      delete data.socialLinks;
+    }
+  }
+
   // Ensure array fields parsed if sent as JSON string or string
   const arrayFields = ['publications', 'researchInterests', 'equipmentList', 'subjectsSupported', 'studentNames', 'tags', 'phoneNumbers'];
   arrayFields.forEach((field) => {
@@ -241,7 +259,14 @@ const getSettings = async (req, res) => {
       if (!setting.phoneNumbers || setting.phoneNumbers.length === 0) setting.phoneNumbers = ['+91-9364445555', '0422-2656871'];
       if (!setting.email) setting.email = 'info@easacollege.com';
     }
-    res.json(normalizeId(setting));
+    const normalized = normalizeId(setting);
+    normalized.socialLinks = {
+      facebook: setting.facebookUrl || '',
+      twitter: setting.twitterUrl || '',
+      linkedin: setting.linkedinUrl || '',
+      instagram: setting.instagramUrl || ''
+    };
+    res.json(normalized);
   } catch (error) {
     console.error('getSettings error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });

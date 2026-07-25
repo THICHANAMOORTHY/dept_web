@@ -119,6 +119,10 @@ model Setting {
   phoneNumbers            String[]
   email                   String?
   address                 String?
+  facebookUrl             String?
+  twitterUrl              String?
+  linkedinUrl             String?
+  instagramUrl            String?
   hodPhotoUrl             String?
   hodTitle                String?
   hodName                 String?
