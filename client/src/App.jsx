@@ -27,6 +27,7 @@ import ManageLinks from './admin/pages/ManageLinks';
 import ManageFacultyAchievements from './admin/pages/ManageFacultyAchievements';
 
 import FloatingWidget from './components/FloatingWidget';
+import ScrollToTop from './components/ScrollToTop';
 
 const PublicLayout = () => (
   <>
@@ -43,6 +44,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           {/* Public Routes */}
           <Route element={<PublicLayout />}>

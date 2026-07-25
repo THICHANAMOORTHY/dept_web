@@ -93,7 +93,7 @@ const Navbar = () => {
               className="main-college-link"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}
             >
-              <img src={mainCollegeImg} alt="EASA College" style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }} />
+              <Globe size={18} />
               College Website
             </a>
           </div>
