@@ -48,7 +48,7 @@ router.delete('/activities/:id', protectAdmin, deleteItem('Activity'));
 
 // Settings
 router.get('/settings', protectAdmin, getSettings);
-router.put('/settings', protectAdmin, upload.single('image'), updateSettings);
+router.put('/settings', protectAdmin, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'hodPhoto', maxCount: 1 }]), updateSettings);
 router.post('/curriculum', protectAdmin, upload.single('curriculumPdf'), updateCurriculum);
 router.post('/placement-highlight', protectAdmin, upload.single('image'), updatePlacementHighlight);
 

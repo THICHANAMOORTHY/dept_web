@@ -6,10 +6,15 @@ const SiteSettings = () => {
   const [formData, setFormData] = useState({
     studentFacultyRatio: '', placementRatio: '', facultyCount: '', rankingText: '',
     phoneNumbers: '', email: '', address: '',
-    socialLinks: { facebook: '', twitter: '', linkedin: '', instagram: '' }
+    socialLinks: { facebook: '', twitter: '', linkedin: '', instagram: '' },
+    hodTitle: 'Welcome from the Head of the Department',
+    hodName: '',
+    hodMessage: ''
   });
   const [imageFile, setImageFile] = useState(null);
+  const [hodPhotoFile, setHodPhotoFile] = useState(null);
   const [currentHeroUrl, setCurrentHeroUrl] = useState(null);
+  const [currentHodPhotoUrl, setCurrentHodPhotoUrl] = useState(null);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -25,9 +30,13 @@ const SiteSettings = () => {
             phoneNumbers: data.phoneNumbers ? data.phoneNumbers.join(', ') : '',
             email: data.email || '',
             address: data.address || '',
-            socialLinks: data.socialLinks || { facebook: '', twitter: '', linkedin: '', instagram: '' }
+            socialLinks: data.socialLinks || { facebook: '', twitter: '', linkedin: '', instagram: '' },
+            hodTitle: data.hodTitle || 'Welcome from the Head of the Department',
+            hodName: data.hodName || '',
+            hodMessage: data.hodMessage || ''
           });
           setCurrentHeroUrl(data.heroBannerUrl);
+          setCurrentHodPhotoUrl(data.hodPhotoUrl);
         }
       } catch (err) { console.error(err); }
     };
@@ -57,6 +66,7 @@ const SiteSettings = () => {
       }
     });
     if (imageFile) data.append('image', imageFile);
+    if (hodPhotoFile) data.append('hodPhoto', hodPhotoFile);
 
     try {
       await api.put('/admin/settings', data, { headers: { 'Content-Type': 'multipart/form-data' } });
@@ -71,7 +81,46 @@ const SiteSettings = () => {
         <h3>Hero Banner</h3>
         <ImageUploader currentImage={currentHeroUrl ? getImageUrl(currentHeroUrl) : null} onChange={setImageFile} />
         
-        <h3>Statistics Strip</h3>
+        <h3 style={{ marginTop: '2rem', borderTop: '1px solid #eee', paddingTop: '1.5rem' }}>HOD Welcome Message & Photo</h3>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>HOD Photo</label>
+          <ImageUploader currentImage={currentHodPhotoUrl ? getImageUrl(currentHodPhotoUrl) : null} onChange={setHodPhotoFile} />
+        </div>
+        <div style={{ marginBottom: '1rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>HOD Section Heading</label>
+          <input
+            type="text"
+            name="hodTitle"
+            value={formData.hodTitle}
+            onChange={handleChange}
+            placeholder="e.g. Welcome from the Head of the Department"
+            style={{ width: '100%', padding: '0.75rem', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
+          />
+        </div>
+        <div style={{ marginBottom: '1rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>HOD Name (Optional)</label>
+          <input
+            type="text"
+            name="hodName"
+            value={formData.hodName}
+            onChange={handleChange}
+            placeholder="e.g. Dr. N. Kaleeswari, M.E., Ph.D."
+            style={{ width: '100%', padding: '0.75rem', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
+          />
+        </div>
+        <div style={{ marginBottom: '2rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>HOD Message / Quote</label>
+          <textarea
+            name="hodMessage"
+            value={formData.hodMessage}
+            onChange={handleChange}
+            rows={5}
+            placeholder="Welcome to the Department of Electronics and Communication Engineering..."
+            style={{ width: '100%', padding: '0.75rem', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
+          />
+        </div>
+
+        <h3 style={{ marginTop: '2rem', borderTop: '1px solid #eee', paddingTop: '1.5rem' }}>Statistics Strip</h3>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
           <input type="text" name="studentFacultyRatio" value={formData.studentFacultyRatio} onChange={handleChange} placeholder="Student:Faculty Ratio" style={{ padding: '0.75rem', border: '1px solid #ccc', borderRadius: '4px' }} />
           <input type="text" name="placementRatio" value={formData.placementRatio} onChange={handleChange} placeholder="Placement Ratio" style={{ padding: '0.75rem', border: '1px solid #ccc', borderRadius: '4px' }} />

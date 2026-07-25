@@ -254,8 +254,24 @@ const updateSettings = async (req, res) => {
     let data = sanitizeData('Setting', req.body);
 
     if (req.file) {
-      const filename = `hero-banner-${Date.now()}${path.extname(req.file.originalname)}`;
-      data.heroBannerUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
+      if (req.file.fieldname === 'hodPhoto') {
+        const filename = `hod-photo-${Date.now()}${path.extname(req.file.originalname)}`;
+        data.hodPhotoUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
+      } else {
+        const filename = `hero-banner-${Date.now()}${path.extname(req.file.originalname)}`;
+        data.heroBannerUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
+      }
+    } else if (req.files) {
+      if (req.files.image && req.files.image[0]) {
+        const file = req.files.image[0];
+        const filename = `hero-banner-${Date.now()}${path.extname(file.originalname)}`;
+        data.heroBannerUrl = await uploadToSupabase(file.buffer, filename, file.mimetype);
+      }
+      if (req.files.hodPhoto && req.files.hodPhoto[0]) {
+        const file = req.files.hodPhoto[0];
+        const filename = `hod-photo-${Date.now()}${path.extname(file.originalname)}`;
+        data.hodPhotoUrl = await uploadToSupabase(file.buffer, filename, file.mimetype);
+      }
     }
 
     if (setting) {

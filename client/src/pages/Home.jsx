@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Award, BookOpen, Users, Calendar, Briefcase, Cpu, ExternalLink, Link as LinkIcon } from 'lucide-react';
-import { getNews, getImageUrl, getActivities, getLinks } from '../services/api';
+import { getNews, getImageUrl, getActivities, getLinks, getSettings } from '../services/api';
 import './Home.css';
 import './Page.css';
 import { Link, useLocation } from 'react-router-dom';
@@ -10,9 +10,22 @@ const Home = () => {
   const [news, setNews] = useState([]);
   const [activities, setActivities] = useState([]);
   const [links, setLinks] = useState([]);
+  const [settings, setSettings] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const { data } = await getSettings();
+        if (data) {
+          setSettings(data);
+        }
+      } catch (err) {
+        console.error('Error fetching settings:', err);
+      }
+    };
+    fetchSettings();
+
     const fetchLinks = async () => {
       try {
         const { data } = await getLinks();
@@ -275,11 +288,28 @@ const Home = () => {
       <section className="hod-teaser-section">
         <div className="container hod-grid">
           <div className="hod-image-wrapper">
-            <img src={hodImg} alt="HOD" className="hod-image" />
+            <img
+              src={settings?.hodPhotoUrl ? getImageUrl(settings.hodPhotoUrl) : hodImg}
+              alt="HOD"
+              className="hod-image"
+            />
           </div>
           <div className="hod-content">
-            <h2>Welcome from the <span className="gradient-text">Head of the Department</span></h2>
-            <p className="quote">"Welcome to the Department of Electronics and Communication Engineering. Our department is dedicated to providing an environment that fosters intellectual growth, innovation, and leadership among our students. We are proud of our state-of-the-art infrastructure and highly qualified faculty who are committed to delivering quality education."</p>
+            <h2>
+              {settings?.hodTitle ? (
+                settings.hodTitle
+              ) : (
+                <>Welcome from the <span className="gradient-text">Head of the Department</span></>
+              )}
+            </h2>
+            {settings?.hodName && (
+              <h4 style={{ color: 'var(--primary-color)', marginBottom: '0.75rem', fontWeight: 600, fontSize: '1.1rem' }}>
+                {settings.hodName}
+              </h4>
+            )}
+            <p className="quote">
+              "{settings?.hodMessage || "Welcome to the Department of Electronics and Communication Engineering. Our department is dedicated to providing an environment that fosters intellectual growth, innovation, and leadership among our students. We are proud of our state-of-the-art infrastructure and highly qualified faculty who are committed to delivering quality education."}"
+            </p>
             <Link to="/#about" className="btn btn-secondary mt-4">Read Full Message</Link>
           </div>
         </div>
