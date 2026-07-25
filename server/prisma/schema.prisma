@@ -133,3 +133,16 @@ model QuickLink {
   updatedAt   DateTime @updatedAt
 }
 
+model FacultyAchievement {
+  id          String   @id @default(uuid()) @map("_id")
+  title       String?
+  name        String
+  award       String
+  description String?
+  imageUrl    String?
+  year        Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+

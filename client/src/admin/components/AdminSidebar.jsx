@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, FileText, BookOpen, Image as ImageIcon, Beaker, GraduationCap, Trophy, MessageSquare, Settings, LogOut, KeyRound, Link as LinkIcon } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, BookOpen, Image as ImageIcon, Beaker, GraduationCap, Trophy, Award, MessageSquare, Settings, LogOut, KeyRound, Link as LinkIcon } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
 
@@ -10,13 +10,14 @@ const AdminSidebar = () => {
   const navItems = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Faculty', path: '/admin/faculty', icon: Users },
+    { name: 'Faculty Achievements', path: '/admin/faculty-achievements', icon: Award },
+    { name: 'Student Achievements', path: '/admin/achievements', icon: Trophy },
     { name: 'News & Events', path: '/admin/news', icon: FileText },
     { name: 'Curriculum', path: '/admin/curriculum', icon: BookOpen },
     { name: 'Quick Links', path: '/admin/links', icon: LinkIcon },
     { name: 'Department Activities', path: '/admin/activities', icon: ImageIcon },
     { name: 'Labs & Facilities', path: '/admin/labs', icon: Beaker },
     { name: 'Placements', path: '/admin/placements', icon: GraduationCap },
-    { name: 'Student Achievements', path: '/admin/achievements', icon: Trophy },
     { name: 'Enquiries', path: '/admin/enquiries', icon: MessageSquare },
     { name: 'Site Settings', path: '/admin/settings', icon: Settings },
     { name: 'Change Password', path: '/admin/change-password', icon: KeyRound },

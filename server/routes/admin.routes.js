@@ -38,6 +38,7 @@ generateRoutes('placements', 'Placement');
 generateRoutes('achievements', 'Achievement');
 generateRoutes('enquiries', 'Enquiry');
 generateRoutes('links', 'QuickLink');
+generateRoutes('faculty-achievements', 'FacultyAchievement');
 
 // Custom Activities Routes (multiple images)
 router.get('/activities', protectAdmin, getAll('Activity'));

@@ -24,6 +24,7 @@ import ManageAchievements from './admin/pages/ManageAchievements';
 import ManageCurriculum from './admin/pages/ManageCurriculum';
 import ChangePassword from './admin/pages/ChangePassword';
 import ManageLinks from './admin/pages/ManageLinks';
+import ManageFacultyAchievements from './admin/pages/ManageFacultyAchievements';
 
 import FloatingWidget from './components/FloatingWidget';
 
@@ -64,6 +65,7 @@ function App() {
               <Route path="activities" element={<ManageActivities />} />
               <Route path="placements" element={<ManagePlacements />} />
               <Route path="achievements" element={<ManageAchievements />} />
+              <Route path="faculty-achievements" element={<ManageFacultyAchievements />} />
               <Route path="enquiries" element={<ManageEnquiries />} />
               <Route path="settings" element={<SiteSettings />} />
               <Route path="labs" element={<ManageLabs />} />

@@ -23,6 +23,7 @@ export const getLabs = () => api.get('/labs');
 export const getSettings = () => api.get('/settings');
 export const getAchievements = () => api.get('/achievements');
 export const getLinks = () => api.get('/links');
+export const getFacultyAchievements = () => api.get('/faculty-achievements');
 
 export const getImageUrl = (url) => {
   if (!url) return 'https://via.placeholder.com/400';
