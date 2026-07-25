@@ -57,8 +57,17 @@ const StudentAchievements = () => {
               {achievements.map((item, index) => (
                 <div key={item._id || item.id || index} className="achievement-card card glass" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                   {item.imageUrl && (
-                    <div className="achievement-image-wrapper" style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
-                      <img src={getImageUrl(item.imageUrl)} alt={item.title} className="achievement-image" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <div className="achievement-image-wrapper" style={{ width: '100%', height: '260px', overflow: 'hidden', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' }}>
+                      <img
+                        src={getImageUrl(item.imageUrl)}
+                        alt={item.title}
+                        className="achievement-image"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', borderRadius: '0.5rem' }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80';
+                        }}
+                      />
                     </div>
                   )}
                   <div className="achievement-content" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
