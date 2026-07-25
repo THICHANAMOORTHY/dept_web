@@ -110,7 +110,12 @@ const Home = () => {
   return (
     <div className="home-container">
       {/* Hero Section */}
-      <section className="hero-section">
+      <section
+        className="hero-section"
+        style={{
+          '--hero-bg-url': `url('${settings?.heroBannerUrl ? getImageUrl(settings.heroBannerUrl) : hodImg}')`
+        }}
+      >
         <div className="container hero-content animate-fade-in">
           <h1 className="hero-title" style={{ fontWeight: 600, letterSpacing: '2px', fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
             <span style={{ fontSize: '0.5em', display: 'block', marginBottom: '10px', letterSpacing: '4px', fontWeight: 500 }}>WELCOME TO</span>
@@ -129,15 +134,15 @@ const Home = () => {
           
           <div className="hero-stats">
             <div className="stat-item">
-              <span className="stat-value">NBA</span>
+              <span className="stat-value">{settings?.rankingText || 'NBA'}</span>
               <span className="stat-label">Accredited</span>
             </div>
             <div className="stat-item">
-              <span className="stat-value">100%</span>
+              <span className="stat-value">{settings?.placementRatio || '100%'}</span>
               <span className="stat-label">Placement Asst.</span>
             </div>
             <div className="stat-item">
-              <span className="stat-value">50+</span>
+              <span className="stat-value">{settings?.facultyCount || '50+'}</span>
               <span className="stat-label">Faculty Members</span>
             </div>
           </div>

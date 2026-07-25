@@ -25,7 +25,9 @@
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../assets/hero.png') center/cover;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--hero-bg-url, url('../assets/hero.png'));
+  background-position: center;
+  background-size: cover;
   opacity: 1;
   z-index: -1;
 }

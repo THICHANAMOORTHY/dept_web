@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api, { getImageUrl } from '../../services/api';
 import { Upload, BookOpen, FileText } from 'lucide-react';
 
@@ -6,6 +6,7 @@ const ManageCurriculum = () => {
   const [regulation, setRegulation] = useState('r2024');
   const [file, setFile] = useState(null);
   const [settings, setSettings] = useState({});
+  const pdfInputRef = useRef(null);
 
   const fetchSettings = async () => {
     try {
@@ -114,13 +115,13 @@ const ManageCurriculum = () => {
           marginBottom: '1.5rem',
           backgroundColor: '#fafafa',
           cursor: 'pointer'
-        }} onClick={() => document.getElementById('pdf-upload').click()}>
+        }} onClick={() => pdfInputRef.current && pdfInputRef.current.click()}>
           <Upload size={40} color="#9ca3af" style={{ margin: '0 auto 1rem auto' }} />
           <p style={{ margin: 0, color: '#475569', fontWeight: 500 }}>
             {file ? file.name : `Click to browse PDF for ${regulation === 'r2021' ? 'Regulations 2021' : 'Regulations 2024'}`}
           </p>
           <input
-            id="pdf-upload"
+            ref={pdfInputRef}
             type="file"
             accept=".pdf,application/pdf"
             style={{ display: 'none' }}

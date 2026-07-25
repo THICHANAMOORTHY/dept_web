@@ -77,12 +77,16 @@ const ManagePlacements = () => {
     const data = new FormData();
     data.append('title', highlightForm.title);
     data.append('text', highlightForm.text);
-    if (highlightFile) data.append('image', highlightFile);
+    if (highlightFile) {
+      data.append('image', highlightFile);
+    } else if (!currentHighlightUrl) {
+      data.append('removeBanner', 'true');
+    }
 
     try {
       const res = await api.post('/admin/placement-highlight', data, { headers: { 'Content-Type': 'multipart/form-data' } });
       if (res.data) {
-        setCurrentHighlightUrl(res.data.placementHighlightUrl);
+        setCurrentHighlightUrl(res.data.placementHighlightUrl || null);
         setHighlightFile(null);
         alert('Placement Highlights saved successfully!');
       }
@@ -98,13 +102,17 @@ const ManagePlacements = () => {
     if (!window.confirm('Are you sure you want to remove the Placement Highlight banner?')) return;
     try {
       const data = new FormData();
-      data.append('title', '');
-      data.append('text', '');
+      data.append('removeBanner', 'true');
+      data.append('title', highlightForm.title);
+      data.append('text', highlightForm.text);
       const res = await api.post('/admin/placement-highlight', data);
       setCurrentHighlightUrl(null);
-      setHighlightForm({ title: '', text: '' });
-      alert('Placement Highlight banner removed.');
-    } catch (err) { console.error(err); }
+      setHighlightFile(null);
+      alert('Placement Highlight banner removed successfully!');
+    } catch (err) {
+      console.error(err);
+      alert('Error removing banner: ' + (err.response?.data?.message || err.message));
+    }
   };
 
   const columns = [
@@ -151,7 +159,13 @@ const ManagePlacements = () => {
 
           <div style={{ marginBottom: '1.5rem' }}>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>Banner Image / Poster</label>
-            <ImageUploader currentImage={currentHighlightUrl ? getImageUrl(currentHighlightUrl) : null} onChange={setHighlightFile} />
+            <ImageUploader
+              currentImage={currentHighlightUrl ? getImageUrl(currentHighlightUrl) : null}
+              onChange={(file) => {
+                setHighlightFile(file);
+                if (!file) setCurrentHighlightUrl(null);
+              }}
+            />
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>

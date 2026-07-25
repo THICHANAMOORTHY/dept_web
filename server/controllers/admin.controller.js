@@ -276,7 +276,18 @@ const getSettings = async (req, res) => {
 const updateSettings = async (req, res) => {
   try {
     let setting = await prisma.setting.findFirst();
+
+    const removeHeroBanner = req.body.removeHeroBanner === 'true';
+    const removeHodPhoto = req.body.removeHodPhoto === 'true';
+
     let data = sanitizeData('Setting', req.body);
+
+    if (removeHeroBanner) {
+      data.heroBannerUrl = null;
+    }
+    if (removeHodPhoto) {
+      data.hodPhotoUrl = null;
+    }
 
     if (req.file) {
       if (req.file.fieldname === 'hodPhoto') {
@@ -299,13 +310,29 @@ const updateSettings = async (req, res) => {
       }
     }
 
+    // Filter data to only valid fields on Prisma Setting model
+    const validFields = [
+      'heroBannerUrl', 'studentFacultyRatio', 'placementRatio', 'curriculumPdfUrl',
+      'curriculumPdf2021Url', 'placementHighlightUrl', 'placementHighlightTitle',
+      'placementHighlightText', 'facultyCount', 'rankingText', 'phoneNumbers',
+      'email', 'address', 'facebookUrl', 'twitterUrl', 'linkedinUrl',
+      'instagramUrl', 'hodPhotoUrl', 'hodTitle', 'hodName', 'hodMessage'
+    ];
+
+    const cleanData = {};
+    Object.keys(data).forEach((key) => {
+      if (validFields.includes(key) && data[key] !== undefined) {
+        cleanData[key] = data[key];
+      }
+    });
+
     if (setting) {
       setting = await prisma.setting.update({
         where: { id: setting.id },
-        data,
+        data: cleanData,
       });
     } else {
-      setting = await prisma.setting.create({ data });
+      setting = await prisma.setting.create({ data: cleanData });
     }
     res.json(setting);
   } catch (error) {
@@ -355,7 +382,9 @@ const updatePlacementHighlight = async (req, res) => {
     if (req.body.title !== undefined) data.placementHighlightTitle = req.body.title;
     if (req.body.text !== undefined) data.placementHighlightText = req.body.text;
 
-    if (req.file) {
+    if (req.body.removeBanner === 'true' || req.body.removeImage === 'true') {
+      data.placementHighlightUrl = null;
+    } else if (req.file) {
       const filename = `placement-highlight-${Date.now()}${path.extname(req.file.originalname)}`;
       data.placementHighlightUrl = await uploadToSupabase(req.file.buffer, filename, req.file.mimetype);
     }

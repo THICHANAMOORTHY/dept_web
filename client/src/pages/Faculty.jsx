@@ -142,29 +142,108 @@ const Faculty = () => {
       </div>
 
       <div className="container" style={{ marginTop: '4rem', marginBottom: '4rem' }}>
-        <h2 style={{ fontSize: '2rem', marginBottom: '2rem', textAlign: 'center' }}>Faculty Achievements</h2>
+        <div className="section-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '3rem' }}>
+          <h2>Faculty <span className="gradient-text">Achievements</span></h2>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem', fontSize: '1.1rem' }}>Recognitions, awards, and honors earned by our distinguished faculty members</p>
+          <div className="section-line" style={{ marginTop: '1rem' }}></div>
+        </div>
         
         {facultyAchievements.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: '1.5rem' }}>
+          <div className="grid grid-cols-3" style={{ gap: '2rem' }}>
             {facultyAchievements.map((item, index) => (
-              <div key={item._id || item.id || index} className="card glass animate-fade-in" style={{ padding: '1.5rem', animationDelay: `${(index % 3) * 100}ms`, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                <div style={{ width: '100%', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '0.5rem', overflow: 'hidden' }}>
+              <div
+                key={item._id || item.id || index}
+                className="card glass animate-fade-in"
+                style={{
+                  padding: 0,
+                  overflow: 'hidden',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  borderRadius: '1rem',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+                  animationDelay: `${(index % 3) * 100}ms`
+                }}
+              >
+                <div style={{
+                  width: '100%',
+                  height: '280px',
+                  backgroundColor: 'var(--bg-secondary)',
+                  borderBottom: '1px solid var(--border-color)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  padding: '0.75rem',
+                  position: 'relative'
+                }}>
                   {item.imageUrl ? (
                     <img
                       src={getImageUrl(item.imageUrl)}
                       alt={item.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0.5rem' }}
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '100%',
+                        objectFit: 'contain',
+                        display: 'block',
+                        borderRadius: '0.5rem'
+                      }}
                     />
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
-                      <Award size={48} />
+                      <Award size={54} />
                     </div>
                   )}
+                  {item.year && (
+                    <span style={{
+                      position: 'absolute',
+                      top: '12px',
+                      right: '12px',
+                      backgroundColor: 'var(--primary-color)',
+                      color: 'white',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      padding: '0.25rem 0.65rem',
+                      borderRadius: '999px',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
+                    }}>
+                      {item.year}
+                    </span>
+                  )}
                 </div>
-                <h4 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem', color: 'var(--primary-color)' }}>{item.name}</h4>
-                <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5', fontWeight: 500 }}>{item.award}</p>
-                {item.title && <p style={{ fontSize: '0.85rem', color: 'var(--primary)', marginTop: '0.25rem' }}>{item.title}</p>}
-                {item.description && <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.5rem', lineHeight: '1.5' }}>{item.description}</p>}
+
+                <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <h4 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
+                    {item.name}
+                  </h4>
+
+                  {item.award && (
+                    <span style={{
+                      display: 'inline-block',
+                      padding: '0.35rem 0.85rem',
+                      backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                      color: 'var(--primary-color)',
+                      borderRadius: '1rem',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      alignSelf: 'flex-start',
+                      marginBottom: '0.75rem'
+                    }}>
+                      {item.award}
+                    </span>
+                  )}
+
+                  {item.title && (
+                    <p style={{ fontSize: '0.9rem', color: 'var(--primary-color)', fontWeight: 600, marginBottom: '0.5rem' }}>
+                      {item.title}
+                    </p>
+                  )}
+
+                  {item.description && (
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.925rem', lineHeight: '1.6', flex: 1, margin: 0 }}>
+                      {item.description}
+                    </p>
+                  )}
+                </div>
               </div>
             ))}
           </div>

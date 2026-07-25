@@ -90,17 +90,28 @@ const SiteSettings = () => {
       }
     });
 
-    if (imageFile) data.append('image', imageFile);
-    if (hodPhotoFile) data.append('hodPhoto', hodPhotoFile);
+    if (imageFile) {
+      data.append('image', imageFile);
+    } else if (!currentHeroUrl) {
+      data.append('removeHeroBanner', 'true');
+    }
+
+    if (hodPhotoFile) {
+      data.append('hodPhoto', hodPhotoFile);
+    } else if (!currentHodPhotoUrl) {
+      data.append('removeHodPhoto', 'true');
+    }
 
     try {
       const res = await api.put('/admin/settings', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setStatusMessage({ type: 'success', text: 'Site settings updated successfully!' });
+      setImageFile(null);
+      setHodPhotoFile(null);
       if (res.data) {
-        if (res.data.heroBannerUrl) setCurrentHeroUrl(res.data.heroBannerUrl);
-        if (res.data.hodPhotoUrl) setCurrentHodPhotoUrl(res.data.hodPhotoUrl);
+        setCurrentHeroUrl(res.data.heroBannerUrl || null);
+        setCurrentHodPhotoUrl(res.data.hodPhotoUrl || null);
       }
     } catch (err) {
       console.error('Error updating site settings:', err);
@@ -149,7 +160,13 @@ const SiteSettings = () => {
       <form onSubmit={handleSubmit}>
         <section style={{ marginBottom: '2rem' }}>
           <h3 style={{ fontSize: '1.15rem', color: '#1f2937', marginBottom: '1rem' }}>Hero Banner Image</h3>
-          <ImageUploader currentImage={currentHeroUrl ? getImageUrl(currentHeroUrl) : null} onChange={setImageFile} />
+          <ImageUploader
+            currentImage={currentHeroUrl ? getImageUrl(currentHeroUrl) : null}
+            onChange={(file) => {
+              setImageFile(file);
+              if (!file) setCurrentHeroUrl(null);
+            }}
+          />
         </section>
 
         <section style={{ marginBottom: '2rem', borderTop: '1px solid #e5e7eb', paddingTop: '1.5rem' }}>
@@ -157,7 +174,13 @@ const SiteSettings = () => {
           
           <div style={{ marginBottom: '1.5rem' }}>
             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, color: '#374151' }}>HOD Photo</label>
-            <ImageUploader currentImage={currentHodPhotoUrl ? getImageUrl(currentHodPhotoUrl) : null} onChange={setHodPhotoFile} />
+            <ImageUploader
+              currentImage={currentHodPhotoUrl ? getImageUrl(currentHodPhotoUrl) : null}
+              onChange={(file) => {
+                setHodPhotoFile(file);
+                if (!file) setCurrentHodPhotoUrl(null);
+              }}
+            />
           </div>
 
           <div style={{ marginBottom: '1rem' }}>
