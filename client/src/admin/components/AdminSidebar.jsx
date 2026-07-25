@@ -33,8 +33,9 @@ const AdminSidebar = () => {
       display: 'flex',
       flexDirection: 'column'
     }}>
-      <div style={{ padding: '2rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-        <h2 style={{ color: '#F5A623', fontSize: '1.25rem', fontWeight: 'bold', margin: 0 }}>ECE ELITES Admin</h2>
+      <div style={{ padding: '1.25rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <img src="/logo.png" alt="EASA Logo" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
+        <h2 style={{ color: '#F5A623', fontSize: '1.1rem', fontWeight: 'bold', margin: 0 }}>ECE ELITES Admin</h2>
       </div>
       
       <nav style={{ flex: 1, padding: '1rem 0', overflowY: 'auto' }}>

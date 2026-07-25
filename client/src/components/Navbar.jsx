@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Cpu } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import './Navbar.css'; 
-import mainCollegeImg from '../assets/hero.png';
+import logoImg from '../assets/logo.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +32,7 @@ const Navbar = () => {
     <header className="navbar-container glass">
       <div className="container navbar">
         <Link to="/" className="logo">
-          <Cpu className="logo-icon" size={32} />
+          <img src={logoImg} alt="EASA Logo" className="logo-icon" style={{ width: '42px', height: '42px', objectFit: 'contain' }} />
           <span className="logo-text gradient-text">Department of Electronics and Communication Engineering</span>
         </Link>
 
@@ -58,7 +58,7 @@ const Navbar = () => {
             className="main-college-link"
             style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
           >
-            <img src={mainCollegeImg} alt="EASA College" style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }} />
+            <Globe size={18} />
             College Website
           </a>
         </nav>

@@ -4,7 +4,9 @@ import { getNews, getImageUrl, getActivities, getLinks, getSettings } from '../s
 import './Home.css';
 import './Page.css';
 import { Link, useLocation } from 'react-router-dom';
-import hodImg from '../assets/hero.png';
+
+const defaultHeroBg = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1600&auto=format&fit=crop&q=80';
+const defaultHodImg = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80';
 
 const Home = () => {
   const [news, setNews] = useState([]);
@@ -113,7 +115,7 @@ const Home = () => {
       <section
         className="hero-section"
         style={{
-          '--hero-bg-url': `url('${settings?.heroBannerUrl ? getImageUrl(settings.heroBannerUrl) : hodImg}')`
+          '--hero-bg-url': `url('${settings?.heroBannerUrl ? getImageUrl(settings.heroBannerUrl) : defaultHeroBg}')`
         }}
       >
         <div className="container hero-content animate-fade-in">
@@ -294,7 +296,7 @@ const Home = () => {
         <div className="container hod-grid">
           <div className="hod-image-wrapper">
             <img
-              src={settings?.hodPhotoUrl ? getImageUrl(settings.hodPhotoUrl) : hodImg}
+              src={settings?.hodPhotoUrl ? getImageUrl(settings.hodPhotoUrl) : defaultHodImg}
               alt="HOD"
               className="hod-image"
             />

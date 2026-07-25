@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Cpu, Mail, Phone, MapPin, Globe, Share2, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, Share2, MessageCircle } from 'lucide-react';
 import { getSettings } from '../services/api';
 import './Footer.css';
+import logoImg from '../assets/logo.png';
 
 const Footer = () => {
   const [settings, setSettings] = useState(null);
@@ -32,7 +33,7 @@ const Footer = () => {
       <div className="container grid grid-cols-4 footer-grid">
         <div className="footer-section">
           <Link to="/" className="logo">
-            <Cpu className="logo-icon" size={32} />
+            <img src={logoImg} alt="EASA Logo" className="logo-icon" style={{ width: '42px', height: '42px', objectFit: 'contain' }} />
             <span className="logo-text gradient-text">Department of Electronics and Communication Engineering</span>
           </Link>
           <p className="footer-desc">
