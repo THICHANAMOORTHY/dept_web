@@ -40,7 +40,10 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 app.use(express.json());
-app.use('/uploads', express.static(uploadsDir));
+app.use('/uploads', express.static(uploadsDir, {
+  maxAge: '1d',
+  etag: true
+}));
 
 const facultyRoutes = require('./routes/faculty.routes');
 const newsRoutes = require('./routes/news.routes');

@@ -3,7 +3,7 @@
 }
 
 .page-header {
-  background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop') center/cover;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e1b4b 100%);
   padding: 4rem 0 2rem;
   margin-bottom: 4rem;
   border-bottom: 1px solid var(--border-color);

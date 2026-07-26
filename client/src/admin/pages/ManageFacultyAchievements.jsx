@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api, { getImageUrl } from '../../services/api';
+import api, { getImageUrl, DEFAULT_AVATAR } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -109,7 +109,7 @@ const ManageFacultyAchievements = () => {
       accessor: 'imageUrl',
       render: (row) => (
         <img
-          src={row.imageUrl ? getImageUrl(row.imageUrl) : 'https://via.placeholder.com/60'}
+          src={row.imageUrl ? getImageUrl(row.imageUrl) : DEFAULT_AVATAR}
           alt={row.name}
           style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }}
         />

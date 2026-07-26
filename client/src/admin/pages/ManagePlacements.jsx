@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api, { getImageUrl } from '../../services/api';
+import api, { getImageUrl, DEFAULT_IMAGE_PLACEHOLDER } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -116,7 +116,7 @@ const ManagePlacements = () => {
   };
 
   const columns = [
-    { header: 'Image', accessor: 'logoUrl', render: (row) => <img src={row.logoUrl ? getImageUrl(row.logoUrl) : 'https://via.placeholder.com/40'} alt="placement photo" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '6px' }} /> },
+    { header: 'Image', accessor: 'logoUrl', render: (row) => <img src={row.logoUrl ? getImageUrl(row.logoUrl) : DEFAULT_IMAGE_PLACEHOLDER} alt="placement photo" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '6px' }} /> },
     { header: 'Company / Title', accessor: 'company' },
     { header: 'Year', accessor: 'year' },
   ];

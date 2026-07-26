@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Award, Calendar, Users, Trophy } from 'lucide-react';
-import { getAchievements, getImageUrl } from '../services/api';
+import { getAchievements, getImageUrl, DEFAULT_IMAGE_PLACEHOLDER } from '../services/api';
 import './Page.css';
 
 const StudentAchievements = () => {
@@ -65,7 +65,7 @@ const StudentAchievements = () => {
                         style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', borderRadius: '0.5rem' }}
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80';
+                          e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
                         }}
                       />
                     </div>

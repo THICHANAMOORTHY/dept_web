@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api, { getImageUrl } from '../../services/api';
+import api, { getImageUrl, DEFAULT_IMAGE_PLACEHOLDER } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -61,7 +61,7 @@ const ManageAchievements = () => {
   };
 
   const columns = [
-    { header: 'Image', accessor: 'imageUrl', render: (row) => <img src={row.imageUrl ? getImageUrl(row.imageUrl) : 'https://via.placeholder.com/40'} alt="achievement" style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} /> },
+    { header: 'Image', accessor: 'imageUrl', render: (row) => <img src={row.imageUrl ? getImageUrl(row.imageUrl) : DEFAULT_IMAGE_PLACEHOLDER} alt="achievement" style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} /> },
     { header: 'Achievement Title', accessor: 'title' },
     { header: 'Year', accessor: 'year' },
     { header: 'Students', accessor: 'studentNames', render: (row) => row.studentNames?.join(', ') }

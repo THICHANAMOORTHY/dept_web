@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api, { getImageUrl } from '../../services/api';
+import api, { getImageUrl, DEFAULT_IMAGE_PLACEHOLDER } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -56,7 +56,7 @@ const ManageLabs = () => {
   };
 
   const columns = [
-    { header: 'Lab Image', accessor: 'imageUrl', render: (row) => <img src={row.imageUrl ? getImageUrl(row.imageUrl) : 'https://via.placeholder.com/60'} alt="lab" style={{ width: '60px', height: '40px', objectFit: 'contain', backgroundColor: '#ffffff', padding: '2px', border: '1px solid #e5e7eb', borderRadius: '4px' }} /> },
+    { header: 'Lab Image', accessor: 'imageUrl', render: (row) => <img src={row.imageUrl ? getImageUrl(row.imageUrl) : DEFAULT_IMAGE_PLACEHOLDER} alt="lab" style={{ width: '60px', height: '40px', objectFit: 'contain', backgroundColor: '#ffffff', padding: '2px', border: '1px solid #e5e7eb', borderRadius: '4px' }} /> },
     { header: 'Lab Name', accessor: 'name' },
   ];
 

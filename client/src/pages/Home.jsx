@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Award, BookOpen, Users, Calendar, Briefcase, Cpu, ExternalLink, Link as LinkIcon } from 'lucide-react';
-import { getNews, getImageUrl, getActivities, getLinks, getSettings } from '../services/api';
+import { getNews, getImageUrl, DEFAULT_IMAGE_PLACEHOLDER, getActivities, getLinks, getSettings } from '../services/api';
 import './Home.css';
 import './Page.css';
 import { Link, useLocation } from 'react-router-dom';
-
-const defaultHeroBg = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1600&auto=format&fit=crop&q=80';
-const defaultHodImg = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80';
 
 const Home = () => {
   const [news, setNews] = useState([]);
@@ -114,9 +111,9 @@ const Home = () => {
       {/* Hero Section */}
       <section
         className="hero-section"
-        style={{
-          '--hero-bg-url': `url('${settings?.heroBannerUrl ? getImageUrl(settings.heroBannerUrl) : defaultHeroBg}')`
-        }}
+        style={settings?.heroBannerUrl ? {
+          '--hero-bg-url': `url('${getImageUrl(settings.heroBannerUrl)}')`
+        } : {}}
       >
         <div className="container hero-content animate-fade-in">
           <h1 className="hero-title" style={{ fontWeight: 600, letterSpacing: '2px', fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
@@ -295,11 +292,17 @@ const Home = () => {
       <section className="hod-teaser-section">
         <div className="container hod-grid">
           <div className="hod-image-wrapper">
-            <img
-              src={settings?.hodPhotoUrl ? getImageUrl(settings.hodPhotoUrl) : defaultHodImg}
-              alt="HOD"
-              className="hod-image"
-            />
+            {settings?.hodPhotoUrl ? (
+              <img
+                src={getImageUrl(settings.hodPhotoUrl)}
+                alt="HOD"
+                className="hod-image"
+              />
+            ) : (
+              <div className="hod-image" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '1rem', minHeight: '260px' }}>
+                <Users size={80} style={{ color: 'var(--primary)', opacity: 0.6 }} />
+              </div>
+            )}
           </div>
           <div className="hod-content">
             <h2>
@@ -378,7 +381,7 @@ const Home = () => {
                         style={{ minWidth: '100%', height: '300px', objectFit: 'contain', display: 'block', flexShrink: 0, scrollSnapAlign: 'start' }} 
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80';
+                          e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
                         }}
                       />
                     ))}

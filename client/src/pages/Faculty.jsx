@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFaculty, getFacultyAchievements, getImageUrl } from '../services/api';
+import { getFaculty, getFacultyAchievements, getImageUrl, DEFAULT_AVATAR, DEFAULT_IMAGE_PLACEHOLDER } from '../services/api';
 import { Mail, Book, Search, Trophy, Award } from 'lucide-react';
 import './Page.css';
 
@@ -124,7 +124,7 @@ const Faculty = () => {
                     className="faculty-image"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80';
+                      e.target.src = DEFAULT_AVATAR;
                     }}
                   />
                   <h3>{faculty.name} {faculty.isHOD && '(HOD)'}</h3>
@@ -197,7 +197,7 @@ const Faculty = () => {
                       }}
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&auto=format&fit=crop&q=80';
+                        e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
                       }}
                     />
                   ) : (
