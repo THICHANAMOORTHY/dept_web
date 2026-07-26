@@ -62,7 +62,6 @@ const Footer = () => {
           <ul className="footer-links">
             <li><a href="https://www.easacollege.com/life-at-easa-campus" target="_blank" rel="noopener noreferrer">Library</a></li>
             <li><Link to="/academics#labs">Laboratories & Facilities</Link></li>
-            <li><Link to="/student-achievements">Student Clubs</Link></li>
             <li><Link to="/academics#curriculum">Downloads (Curriculum)</Link></li>
           </ul>
         </div>

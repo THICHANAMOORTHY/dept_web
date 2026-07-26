@@ -139,10 +139,10 @@ const Placements = () => {
                     </div>
                   )}
 
-                  <div style={{ padding: '0.5rem' }}>
-                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>{item.company}</h3>
+                  <div style={{ padding: '0.5rem', textAlign: 'center' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)', textAlign: 'center' }}>{item.company}</h3>
                     {item.recruiterName && (
-                      <p style={{ margin: '0.35rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      <p style={{ margin: '0.35rem 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)', textAlign: 'center' }}>
                         {item.recruiterName}
                       </p>
                     )}
