@@ -100,27 +100,6 @@ npm install
 
 # Start development server
 npm run dev
-```
-
-The application will be accessible at:
-- **Frontend**: `http://localhost:5173`
-- **Backend API**: `http://localhost:5000`
-
----
-
-## 🔑 Environment Variables
-
-Create a `.env` file inside the `server/` directory:
-
-```env
-PORT=5000
-DATABASE_URL="postgresql://user:password@localhost:5432/dept_db?schema=public"
-JWT_SECRET="your_jwt_secret_key"
-SUPABASE_URL="https://your-supabase-project.supabase.co"
-SUPABASE_KEY="your-supabase-anon-key"
-```
-
----
 
 ## 📄 License
 
