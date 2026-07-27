@@ -30,7 +30,7 @@ const Navbar = () => {
 
   return (
     <header className="navbar-container glass">
-      <div className="container navbar">
+      <div className="navbar">
         <Link to="/" className="logo">
           <img src={logoImg} alt="EASA Logo" className="logo-icon" style={{ width: '42px', height: '42px', objectFit: 'contain' }} />
           <span className="logo-text gradient-text">Department of Electronics and Communication Engineering</span>
