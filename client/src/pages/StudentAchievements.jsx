@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Award, Calendar, Users, Trophy } from 'lucide-react';
+import { Award, Calendar, Users, Trophy, ArrowRight } from 'lucide-react';
 import { getAchievements, getImageUrl, DEFAULT_IMAGE_PLACEHOLDER } from '../services/api';
+import DetailModal from '../components/DetailModal';
 import './Page.css';
 
 const StudentAchievements = () => {
   const [achievements, setAchievements] = useState([]);
+  const [selectedAchievement, setSelectedAchievement] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,48 +56,76 @@ const StudentAchievements = () => {
             </div>
             
             <div className="achievement-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2rem' }}>
-              {achievements.map((item, index) => (
-                <div key={item._id || item.id || index} className="achievement-card card glass" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                  {item.imageUrl && (
-                    <div className="achievement-image-wrapper" style={{ width: '100%', height: '260px', overflow: 'hidden', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' }}>
-                      <img
-                        src={getImageUrl(item.imageUrl)}
-                        alt={item.title}
-                        className="achievement-image"
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', borderRadius: '0.5rem' }}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
-                        }}
-                      />
+              {achievements.map((item, index) => {
+                const textContent = item.description || '';
+                const isLong = textContent.length > 100;
+                const displayText = isLong ? textContent.substring(0, 100) + '...' : textContent;
+
+                return (
+                  <div key={item._id || item.id || index} className="achievement-card card glass" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    {item.imageUrl && (
+                      <div className="achievement-image-wrapper" style={{ width: '100%', height: '260px', overflow: 'hidden', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' }}>
+                        <img
+                          src={getImageUrl(item.imageUrl)}
+                          alt={item.title}
+                          className="achievement-image"
+                          style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', borderRadius: '0.5rem' }}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
+                          }}
+                        />
+                      </div>
+                    )}
+                    <div className="achievement-content" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                      <h4 className="achievement-title" style={{ fontSize: '1.25rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>{item.title}</h4>
+                      {item.studentNames && item.studentNames.length > 0 && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', marginBottom: '0.75rem', fontSize: '0.9rem' }}>
+                          <Users size={16} /> <span>{Array.isArray(item.studentNames) ? item.studentNames.join(', ') : item.studentNames}</span>
+                        </div>
+                      )}
+                      {item.year && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', fontSize: '0.9rem' }}>
+                          <Calendar size={16} /> <span>{item.year}</span>
+                        </div>
+                      )}
+                      <p className="achievement-desc" style={{ color: 'var(--text-secondary)', lineHeight: '1.6', flex: 1, fontSize: '0.925rem' }}>{displayText}</p>
+                      
+                      {item.tags && item.tags.length > 0 && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.75rem' }}>
+                          {(Array.isArray(item.tags) ? item.tags : [item.tags]).map((tag, i) => (
+                            <span key={i} style={{ padding: '0.25rem 0.75rem', backgroundColor: 'rgba(56, 189, 248, 0.1)', color: 'var(--primary)', borderRadius: '1rem', fontSize: '0.8rem' }}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      <div style={{ marginTop: '1.25rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'flex-end' }}>
+                        <button
+                          onClick={() => setSelectedAchievement(item)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--primary)',
+                            fontWeight: 600,
+                            fontSize: '0.875rem',
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            padding: '0.25rem 0.5rem',
+                            borderRadius: '4px',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          Read More <ArrowRight size={14} />
+                        </button>
+                      </div>
                     </div>
-                  )}
-                  <div className="achievement-content" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                    <h4 className="achievement-title" style={{ fontSize: '1.25rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>{item.title}</h4>
-                    {item.studentNames && item.studentNames.length > 0 && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', marginBottom: '1rem', fontSize: '0.9rem' }}>
-                        <Users size={16} /> <span>{Array.isArray(item.studentNames) ? item.studentNames.join(', ') : item.studentNames}</span>
-                      </div>
-                    )}
-                    {item.year && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', marginBottom: '1rem', fontSize: '0.9rem' }}>
-                        <Calendar size={16} /> <span>{item.year}</span>
-                      </div>
-                    )}
-                    <p className="achievement-desc" style={{ color: 'var(--text-secondary)', lineHeight: '1.6', flex: 1 }}>{item.description}</p>
-                    
-                    {item.tags && item.tags.length > 0 && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}>
-                        {(Array.isArray(item.tags) ? item.tags : [item.tags]).map((tag, i) => (
-                          <span key={i} style={{ padding: '0.25rem 0.75rem', backgroundColor: 'rgba(56, 189, 248, 0.1)', color: 'var(--primary)', borderRadius: '1rem', fontSize: '0.8rem' }}>
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         ) : (
@@ -108,6 +138,21 @@ const StudentAchievements = () => {
           </div>
         )}
       </div>
+
+      {/* Detail Modal for Recent Achievements */}
+      <DetailModal
+        isOpen={Boolean(selectedAchievement)}
+        onClose={() => setSelectedAchievement(null)}
+        title={selectedAchievement?.title}
+        subtitle={selectedAchievement?.year ? String(selectedAchievement.year) : null}
+        badge="Recent Achievement"
+        imageUrl={selectedAchievement?.imageUrl ? getImageUrl(selectedAchievement.imageUrl) : null}
+        description={selectedAchievement?.description}
+        details={[
+          ...(selectedAchievement?.studentNames && selectedAchievement.studentNames.length > 0 ? [{ label: 'Achievers / Students', value: Array.isArray(selectedAchievement.studentNames) ? selectedAchievement.studentNames.join(', ') : selectedAchievement.studentNames }] : []),
+          ...(selectedAchievement?.tags && selectedAchievement.tags.length > 0 ? [{ label: 'Tags / Category', value: selectedAchievement.tags }] : [])
+        ]}
+      />
     </div>
   );
 };

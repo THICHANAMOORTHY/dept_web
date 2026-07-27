@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { getFaculty, getFacultyAchievements, getImageUrl, DEFAULT_AVATAR, DEFAULT_IMAGE_PLACEHOLDER } from '../services/api';
-import { Mail, Book, Search, Trophy, Award } from 'lucide-react';
+import { Mail, Book, Search, Trophy, Award, ArrowRight } from 'lucide-react';
+import DetailModal from '../components/DetailModal';
 import './Page.css';
 
 const Faculty = () => {
   const [facultyList, setFacultyList] = useState([]);
   const [facultyAchievements, setFacultyAchievements] = useState([]);
+  const [selectedAchievement, setSelectedAchievement] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('All');
@@ -158,106 +160,122 @@ const Faculty = () => {
         
         {facultyAchievements.length > 0 ? (
           <div className="grid grid-cols-3" style={{ gap: '2rem' }}>
-            {facultyAchievements.map((item, index) => (
-              <div
-                key={item._id || item.id || index}
-                className="card glass animate-fade-in"
-                style={{
-                  padding: 0,
-                  overflow: 'hidden',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  borderRadius: '1rem',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
-                  animationDelay: `${(index % 3) * 100}ms`
-                }}
-              >
-                <div style={{
-                  width: '100%',
-                  height: '280px',
-                  backgroundColor: 'var(--bg-secondary)',
-                  borderBottom: '1px solid var(--border-color)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                  padding: '0.75rem',
-                  position: 'relative'
-                }}>
-                  {item.imageUrl ? (
-                    <img
-                      src={getImageUrl(item.imageUrl)}
-                      alt={item.name}
-                      style={{
-                        maxWidth: '100%',
-                        maxHeight: '100%',
-                        objectFit: 'contain',
-                        display: 'block',
-                        borderRadius: '0.5rem'
-                      }}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
-                      }}
-                    />
-                  ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
-                      <Award size={54} />
+            {facultyAchievements.map((item, index) => {
+              const textContent = item.description || '';
+              const isLong = textContent.length > 100;
+              const displayText = isLong ? textContent.substring(0, 100) + '...' : textContent;
+
+              return (
+                <div key={item._id || item.id || index} className="card glass animate-fade-in" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{
+                    width: '100%',
+                    height: '240px',
+                    backgroundColor: 'var(--bg-secondary)',
+                    borderBottom: '1px solid var(--border-color)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                    padding: '0.75rem',
+                    position: 'relative'
+                  }}>
+                    {item.imageUrl ? (
+                      <img
+                        src={getImageUrl(item.imageUrl)}
+                        alt={item.name}
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '100%',
+                          objectFit: 'contain',
+                          display: 'block',
+                          borderRadius: '0.5rem'
+                        }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
+                        }}
+                      />
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)' }}>
+                        <Award size={54} />
+                      </div>
+                    )}
+                    {item.year && (
+                      <span style={{
+                        position: 'absolute',
+                        top: '12px',
+                        right: '12px',
+                        backgroundColor: 'var(--primary-color)',
+                        color: 'white',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        padding: '0.25rem 0.65rem',
+                        borderRadius: '999px',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
+                      }}>
+                        {item.year}
+                      </span>
+                    )}
+                  </div>
+
+                  <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <h4 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
+                      {item.name}
+                    </h4>
+
+                    {item.award && (
+                      <span style={{
+                        display: 'inline-block',
+                        padding: '0.35rem 0.85rem',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        color: 'var(--primary-color)',
+                        borderRadius: '1rem',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        alignSelf: 'flex-start',
+                        marginBottom: '0.75rem'
+                      }}>
+                        {item.award}
+                      </span>
+                    )}
+
+                    {item.title && (
+                      <p style={{ fontSize: '0.9rem', color: 'var(--primary-color)', fontWeight: 600, marginBottom: '0.5rem' }}>
+                        {item.title}
+                      </p>
+                    )}
+
+                    {item.description && (
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.925rem', lineHeight: '1.6', flex: 1, margin: 0 }}>
+                        {displayText}
+                      </p>
+                    )}
+
+                    <div style={{ marginTop: '1.25rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'flex-end' }}>
+                      <button
+                        onClick={() => setSelectedAchievement(item)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--primary)',
+                          fontWeight: 600,
+                          fontSize: '0.875rem',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.25rem',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '4px',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        Read More <ArrowRight size={14} />
+                      </button>
                     </div>
-                  )}
-                  {item.year && (
-                    <span style={{
-                      position: 'absolute',
-                      top: '12px',
-                      right: '12px',
-                      backgroundColor: 'var(--primary-color)',
-                      color: 'white',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      padding: '0.25rem 0.65rem',
-                      borderRadius: '999px',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
-                    }}>
-                      {item.year}
-                    </span>
-                  )}
+                  </div>
                 </div>
-
-                <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <h4 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
-                    {item.name}
-                  </h4>
-
-                  {item.award && (
-                    <span style={{
-                      display: 'inline-block',
-                      padding: '0.35rem 0.85rem',
-                      backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                      color: 'var(--primary-color)',
-                      borderRadius: '1rem',
-                      fontSize: '0.85rem',
-                      fontWeight: 600,
-                      alignSelf: 'flex-start',
-                      marginBottom: '0.75rem'
-                    }}>
-                      {item.award}
-                    </span>
-                  )}
-
-                  {item.title && (
-                    <p style={{ fontSize: '0.9rem', color: 'var(--primary-color)', fontWeight: 600, marginBottom: '0.5rem' }}>
-                      {item.title}
-                    </p>
-                  )}
-
-                  {item.description && (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.925rem', lineHeight: '1.6', flex: 1, margin: 0 }}>
-                      {item.description}
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="card glass" style={{ textAlign: 'center', padding: '3rem' }}>
@@ -269,6 +287,20 @@ const Faculty = () => {
           </div>
         )}
       </div>
+
+      {/* Detail Modal for Faculty Achievements */}
+      <DetailModal
+        isOpen={Boolean(selectedAchievement)}
+        onClose={() => setSelectedAchievement(null)}
+        title={selectedAchievement?.name}
+        subtitle={selectedAchievement?.year ? String(selectedAchievement.year) : null}
+        badge={selectedAchievement?.award || 'Faculty Achievement'}
+        imageUrl={selectedAchievement?.imageUrl ? getImageUrl(selectedAchievement.imageUrl) : null}
+        description={selectedAchievement?.description}
+        details={
+          selectedAchievement?.title ? [{ label: 'Achievement Title / Topic', value: selectedAchievement.title }] : []
+        }
+      />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Award, BookOpen, Users, Calendar, Briefcase, Cpu, ExternalLink, Link as LinkIcon } from 'lucide-react';
 import { getNews, getImageUrl, DEFAULT_IMAGE_PLACEHOLDER, getActivities, getLinks, getSettings } from '../services/api';
+import DetailModal from '../components/DetailModal';
 import './Home.css';
 import './Page.css';
 import { Link, useLocation } from 'react-router-dom';
@@ -10,6 +11,7 @@ const Home = () => {
   const [activities, setActivities] = useState([]);
   const [links, setLinks] = useState([]);
   const [settings, setSettings] = useState(null);
+  const [selectedNews, setSelectedNews] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -209,29 +211,59 @@ const Home = () => {
         
         <div className="grid grid-cols-3">
           {news.length > 0 ? (
-            news.map((item, index) => (
-              <div key={item._id || index} className="news-card card" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', padding: 0 }}>
-                {item.thumbnailUrl && (
-                  <div style={{ width: '100%', display: 'flex', justifyContent: 'center', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
-                    <img 
-                      src={getImageUrl(item.thumbnailUrl)} 
-                      alt={item.title} 
-                      style={{ width: '100%', height: 'auto', maxHeight: '250px', objectFit: 'contain', display: 'block' }} 
-                    />
-                  </div>
-                )}
-                <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <div className="news-type" style={{ alignSelf: 'flex-start', marginBottom: '0.75rem' }}>
-                    {item.type === 'news' ? 'News' : 'Announcement'}
-                  </div>
-                  <h4 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>{item.title}</h4>
-                  <p style={{ marginBottom: '1.5rem', flex: 1 }}>{item.shortDescription || item.content}</p>
-                  <div className="news-date" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)' }}>
-                    <Calendar size={16} /> {new Date(item.date).toLocaleDateString()}
+            news.map((item, index) => {
+              const textContent = item.shortDescription || item.content || '';
+              const isLong = textContent.length > 110;
+              const displayText = isLong ? textContent.substring(0, 110) + '...' : textContent;
+
+              return (
+                <div key={item._id || index} className="news-card card" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', padding: 0 }}>
+                  {item.thumbnailUrl && (
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'center', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+                      <img 
+                        src={getImageUrl(item.thumbnailUrl)} 
+                        alt={item.title} 
+                        style={{ width: '100%', height: 'auto', maxHeight: '250px', objectFit: 'contain', display: 'block' }} 
+                      />
+                    </div>
+                  )}
+                  <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <div className="news-type" style={{ alignSelf: 'flex-start', marginBottom: '0.75rem' }}>
+                      {item.type === 'news' ? 'News' : 'Announcement'}
+                    </div>
+                    <h4 style={{ marginBottom: '0.75rem', fontSize: '1.1rem' }}>{item.title}</h4>
+                    <p style={{ marginBottom: '1rem', flex: 1, fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                      {displayText}
+                    </p>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}>
+                      <div className="news-date" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                        <Calendar size={14} /> {new Date(item.date).toLocaleDateString()}
+                      </div>
+                      <button
+                        onClick={() => setSelectedNews(item)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--primary)',
+                          fontWeight: 600,
+                          fontSize: '0.875rem',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.25rem',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '4px',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        Read More <ArrowRight size={14} />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <>
               <div className="news-card card loading-skeleton"></div>
@@ -405,6 +437,19 @@ const Home = () => {
           </section>
         )}
       </div>
+
+      {/* Detail Modal for Latest Updates */}
+      <DetailModal
+        isOpen={Boolean(selectedNews)}
+        onClose={() => setSelectedNews(null)}
+        title={selectedNews?.title}
+        subtitle={selectedNews?.date ? new Date(selectedNews.date).toLocaleDateString() : null}
+        badge={selectedNews?.type === 'news' ? 'News' : 'Announcement'}
+        imageUrl={selectedNews?.thumbnailUrl ? getImageUrl(selectedNews.thumbnailUrl) : null}
+        description={selectedNews?.content || selectedNews?.shortDescription}
+        link={selectedNews?.link || selectedNews?.pdfUrl || selectedNews?.externalUrl}
+        linkText="View Associated Link / Document"
+      />
     </div>
   );
 };

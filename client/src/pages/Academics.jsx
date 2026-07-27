@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Beaker } from 'lucide-react';
+import { Beaker, ArrowRight } from 'lucide-react';
 import { getLabs, getImageUrl, getSettings } from '../services/api';
+import DetailModal from '../components/DetailModal';
 import './Page.css';
 
 const Academics = () => {
   const [labs, setLabs] = useState([]);
+  const [selectedLab, setSelectedLab] = useState(null);
   const [curriculumPdfUrl, setCurriculumPdfUrl] = useState(null);
   const [curriculumPdf2021Url, setCurriculumPdf2021Url] = useState(null);
   const location = useLocation();
@@ -215,45 +217,72 @@ const Academics = () => {
           </h2>
 
           {labs.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.5rem' }}>
-              {labs.map((lab, index) => (
-                <div
-                  key={lab._id || lab.id || index}
-                  className="card glass animate-fade-in"
-                  style={{
-                    padding: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    backgroundColor: 'var(--bg-secondary)',
-                    border: '1px solid var(--border-color)',
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-                  }}
-                >
-                  <div style={{ width: '100%', height: '180px', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderBottom: '1px solid var(--border-color)', padding: '1rem' }}>
-                    {lab.imageUrl ? (
-                      <img src={getImageUrl(lab.imageUrl)} alt={lab.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
-                    ) : (
-                      <div style={{ color: 'var(--primary)', opacity: 0.75, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                        <Beaker size={48} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+              {labs.map((lab, index) => {
+                const isLong = lab.description && lab.description.length > 90;
+                const displayText = isLong ? lab.description.substring(0, 90) + '...' : lab.description;
+
+                return (
+                  <div
+                    key={lab._id || lab.id || index}
+                    className="card glass animate-fade-in"
+                    style={{
+                      padding: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      backgroundColor: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-color)',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+                      transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                    }}
+                  >
+                    <div style={{ width: '100%', height: '180px', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderBottom: '1px solid var(--border-color)', padding: '1rem' }}>
+                      {lab.imageUrl ? (
+                        <img src={getImageUrl(lab.imageUrl)} alt={lab.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                      ) : (
+                        <div style={{ color: 'var(--primary)', opacity: 0.75, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                          <Beaker size={48} />
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div style={{ padding: '1.25rem 1.25rem', display: 'flex', flexDirection: 'column', flexGrow: 1, alignItems: 'flex-start' }}>
+                      <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0, lineHeight: '1.4' }}>
+                        {lab.name}
+                      </h3>
+                      {lab.description && (
+                        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '0.5rem', lineHeight: '1.5', flexGrow: 1 }}>
+                          {displayText}
+                        </p>
+                      )}
+                      
+                      <div style={{ marginTop: '1rem', width: '100%', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'flex-end' }}>
+                        <button
+                          onClick={() => setSelectedLab(lab)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--primary)',
+                            fontWeight: 600,
+                            fontSize: '0.875rem',
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            padding: '0.25rem 0.5rem',
+                            borderRadius: '4px',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          Read More <ArrowRight size={14} />
+                        </button>
                       </div>
-                    )}
+                    </div>
                   </div>
-                  
-                  <div style={{ padding: '1.25rem 1rem', display: 'flex', flexDirection: 'column', flexGrow: 1, textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-                    <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0, lineHeight: '1.4' }}>
-                      {lab.name}
-                    </h3>
-                    {lab.description && (
-                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.5rem', lineHeight: '1.5' }}>
-                        {lab.description}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="card glass" style={{ textAlign: 'center', padding: '3rem' }}>
@@ -283,6 +312,20 @@ const Academics = () => {
           </div>
         </section>
       </div>
+
+      {/* Detail Modal for Labs & Facilities */}
+      <DetailModal
+        isOpen={Boolean(selectedLab)}
+        onClose={() => setSelectedLab(null)}
+        title={selectedLab?.name}
+        badge="Laboratory & Facility"
+        imageUrl={selectedLab?.imageUrl ? getImageUrl(selectedLab.imageUrl) : null}
+        description={selectedLab?.description}
+        details={[
+          ...(selectedLab?.equipmentList && selectedLab.equipmentList.length > 0 ? [{ label: 'Equipment & Hardware Available', value: selectedLab.equipmentList }] : []),
+          ...(selectedLab?.subjectsSupported && selectedLab.subjectsSupported.length > 0 ? [{ label: 'Courses & Practical Work', value: selectedLab.subjectsSupported }] : [])
+        ]}
+      />
     </div>
   );
 };
