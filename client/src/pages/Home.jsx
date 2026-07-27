@@ -153,9 +153,8 @@ const Home = () => {
 
       {/* Why Choose ECE Section (New Style) */}
       <section className="why-choose-section container" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
-        <div className="section-header" style={{ marginBottom: '3rem' }}>
+        <div className="section-header" style={{ marginBottom: '3rem', justifyContent: 'center' }}>
           <h2>Why Choose ECE at <span className="gradient-text">EASA</span></h2>
-          <div className="section-line"></div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(400px, 100%), 1fr))', gap: '2rem' }}>
           {/* Card 1 */}
@@ -279,11 +278,8 @@ const Home = () => {
       {/* Quick Links / Important Portals Section */}
       {links.length > 0 && (
         <section className="container" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
-          <div className="section-header" style={{ flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', marginBottom: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', width: '100%' }}>
-              <h2><span className="gradient-text">Important Links</span> & Portals</h2>
-              <div className="section-line"></div>
-            </div>
+          <div className="section-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '2rem' }}>
+            <h2><span className="gradient-text">Important Links</span> & Portals</h2>
             <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>Access official forms, portals, and student resources</p>
           </div>
 
@@ -365,12 +361,10 @@ const Home = () => {
       {/* About Section */}
       <div id="about">
         <div className="container" style={{ marginTop: '4rem', marginBottom: '4rem' }}>
-          <div className="section-header" style={{ flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', marginBottom: '3rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', width: '100%' }}>
-              <h2>About the <span className="gradient-text">Department</span></h2>
-              <div className="section-line"></div>
-            </div>
+          <div className="section-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '3rem' }}>
+            <h2>About the <span className="gradient-text">Department</span></h2>
             <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem', fontSize: '1.1rem' }}>Pioneering excellence in Electronics & Communication since 1995.</p>
+            <div className="section-line" style={{ marginTop: '1rem' }}></div>
           </div>
 
           <div className="page-content">
@@ -402,12 +396,10 @@ const Home = () => {
         {/* Dynamic Department Activities Section (Full-Width Desktop Container) */}
         {activities.length > 0 && (
           <section className="container" style={{ marginTop: '3rem', marginBottom: '4rem' }}>
-            <div className="section-header" style={{ flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', marginBottom: '3rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', width: '100%' }}>
-                <h2>Department <span className="gradient-text">Activities</span></h2>
-                <div className="section-line"></div>
-              </div>
+            <div className="section-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '3rem' }}>
+              <h2>Department <span className="gradient-text">Activities</span></h2>
               <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem', fontSize: '1.1rem' }}>Highlights and glimpses of events conducted in our department</p>
+              <div className="section-line" style={{ marginTop: '1rem' }}></div>
             </div>
 
             <div className="grid grid-cols-3" style={{ gap: '2rem' }}>
