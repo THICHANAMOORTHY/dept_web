@@ -12,6 +12,7 @@ const Home = () => {
   const [links, setLinks] = useState([]);
   const [settings, setSettings] = useState(null);
   const [selectedNews, setSelectedNews] = useState(null);
+  const [selectedActivity, setSelectedActivity] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -402,37 +403,64 @@ const Home = () => {
             </div>
 
             <div className="grid grid-cols-3" style={{ gap: '2rem' }}>
-              {activities.map((item, index) => (
-                <div key={item._id || index} className="card glass animate-fade-in" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ width: '100%', display: 'flex', overflowX: 'auto', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)', scrollSnapType: 'x mandatory' }}>
-                    {(item.images && item.images.length > 0 ? item.images : [item.imageUrl]).map((imgUrl, i) => (
-                      <img 
-                        key={i}
-                        src={getImageUrl(imgUrl)} 
-                        alt={`${item.title} ${i}`} 
-                        style={{ minWidth: '100%', height: '300px', objectFit: 'contain', display: 'block', flexShrink: 0, scrollSnapAlign: 'start' }} 
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
-                        }}
-                      />
-                    ))}
+              {activities.map((item, index) => {
+                const textContent = item.description || '';
+                const isLong = textContent.length > 110;
+                const displayText = isLong ? textContent.substring(0, 110) + '...' : textContent;
+
+                return (
+                  <div key={item._id || index} className="card glass animate-fade-in" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ width: '100%', display: 'flex', overflowX: 'auto', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)', scrollSnapType: 'x mandatory' }}>
+                      {(item.images && item.images.length > 0 ? item.images : [item.imageUrl]).map((imgUrl, i) => (
+                        <img 
+                          key={i}
+                          src={getImageUrl(imgUrl)} 
+                          alt={`${item.title} ${i}`} 
+                          style={{ minWidth: '100%', height: '300px', objectFit: 'contain', display: 'block', flexShrink: 0, scrollSnapAlign: 'start' }} 
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                      <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>{item.title}</h4>
+                      {item.description && (
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', flex: 1 }}>
+                          {displayText}
+                        </p>
+                      )}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}>
+                        {item.category ? (
+                          <span style={{ padding: '0.25rem 0.75rem', backgroundColor: 'rgba(56, 189, 248, 0.1)', color: 'var(--primary)', borderRadius: '1rem', fontSize: '0.8rem', fontWeight: 600 }}>
+                            {item.category}
+                          </span>
+                        ) : <div />}
+                        <button
+                          onClick={() => setSelectedActivity(item)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--primary)',
+                            fontWeight: 600,
+                            fontSize: '0.875rem',
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            padding: '0.25rem 0.5rem',
+                            borderRadius: '4px',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          Read More <ArrowRight size={14} />
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                    <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>{item.title}</h4>
-                    {item.description && (
-                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', flex: 1 }}>
-                        {item.description}
-                      </p>
-                    )}
-                    {item.category && (
-                      <span style={{ display: 'inline-block', marginTop: '1rem', padding: '0.25rem 0.75rem', backgroundColor: 'rgba(56, 189, 248, 0.1)', color: 'var(--primary)', borderRadius: '1rem', fontSize: '0.8rem', fontWeight: 600, alignSelf: 'flex-start' }}>
-                        {item.category}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         )}
@@ -449,6 +477,22 @@ const Home = () => {
         description={selectedNews?.content || selectedNews?.shortDescription}
         link={selectedNews?.link || selectedNews?.pdfUrl || selectedNews?.externalUrl}
         linkText="View Associated Link / Document"
+      />
+
+      {/* Detail Modal for Department Activities */}
+      <DetailModal
+        isOpen={Boolean(selectedActivity)}
+        onClose={() => setSelectedActivity(null)}
+        title={selectedActivity?.title}
+        badge={selectedActivity?.category || 'Department Activity'}
+        images={
+          selectedActivity?.images && selectedActivity.images.length > 0
+            ? selectedActivity.images.map((img) => getImageUrl(img))
+            : selectedActivity?.imageUrl
+            ? [getImageUrl(selectedActivity.imageUrl)]
+            : []
+        }
+        description={selectedActivity?.description}
       />
     </div>
   );

@@ -9,6 +9,7 @@ const DetailModal = ({
   badge,
   badgeColor,
   imageUrl,
+  images = [],
   description,
   details = [],
   link,
@@ -130,7 +131,29 @@ const DetailModal = ({
           flexDirection: 'column',
           gap: '1.25rem'
         }}>
-          {imageUrl && (
+          {images && images.length > 0 ? (
+            <div style={{
+              width: '100%',
+              display: 'flex',
+              gap: '0.75rem',
+              overflowX: 'auto',
+              backgroundColor: 'var(--bg-secondary, #f8fafc)',
+              border: '1px solid var(--border-color, #e2e8f0)',
+              borderRadius: '12px',
+              padding: '0.75rem',
+              scrollSnapType: 'x mandatory'
+            }}>
+              {images.map((img, i) => (
+                <div key={i} style={{ minWidth: '85%', maxHeight: '320px', display: 'flex', justifyContent: 'center', alignItems: 'center', scrollSnapAlign: 'center' }}>
+                  <img 
+                    src={img} 
+                    alt={`${title || 'Detail'} image ${i + 1}`} 
+                    style={{ maxWidth: '100%', maxHeight: '310px', objectFit: 'contain', display: 'block', borderRadius: '8px' }}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : imageUrl ? (
             <div style={{
               width: '100%',
               maxHeight: '320px',
@@ -149,7 +172,7 @@ const DetailModal = ({
                 style={{ maxWidth: '100%', maxHeight: '310px', objectFit: 'contain', display: 'block', borderRadius: '8px' }}
               />
             </div>
-          )}
+          ) : null}
 
           {title && (
             <h3 style={{ fontSize: '1.35rem', fontWeight: 700, margin: 0, color: 'var(--text-primary, #0f172a)', lineHeight: '1.35' }}>
