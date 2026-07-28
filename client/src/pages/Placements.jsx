@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getPlacements, getSettings, getImageUrl } from '../services/api';
 import { Building2, Briefcase, Sparkles } from 'lucide-react';
+import ProgressiveImage from '../components/ProgressiveImage';
 import './Page.css';
 
 const Placements = () => {
@@ -60,10 +61,11 @@ const Placements = () => {
 
             <div className="card glass" style={{ padding: '1.5rem', overflow: 'hidden', marginBottom: '2rem' }}>
               <div style={{ width: '100%', overflow: 'hidden', borderRadius: '12px', marginBottom: '1rem' }}>
-                <img 
+                <ProgressiveImage 
                   src={getImageUrl(settings.placementHighlightUrl)} 
                   alt={settings.placementHighlightTitle || "Placement Highlights"} 
-                  style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'contain', borderRadius: '12px', display: 'block' }} 
+                  containerStyle={{ width: '100%', borderRadius: '12px' }}
+                  style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'contain', display: 'block' }} 
                 />
               </div>
 
@@ -127,9 +129,10 @@ const Placements = () => {
                 <div key={item._id || item.id || index} className="card glass animate-fade-in" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRadius: '12px' }}>
                   {item.logoUrl ? (
                     <div style={{ width: '100%', height: '220px', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-color)', marginBottom: '1rem' }}>
-                      <img
+                      <ProgressiveImage
                         src={getImageUrl(item.logoUrl)}
                         alt={item.company}
+                        containerStyle={{ width: '100%', height: '100%' }}
                         style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                       />
                     </div>

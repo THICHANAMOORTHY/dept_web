@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { X, Calendar, ExternalLink } from 'lucide-react';
+import ProgressiveImage from './ProgressiveImage';
 
 const DetailModal = ({
   isOpen,
@@ -145,9 +146,10 @@ const DetailModal = ({
             }}>
               {images.map((img, i) => (
                 <div key={i} style={{ minWidth: '85%', maxHeight: '320px', display: 'flex', justifyContent: 'center', alignItems: 'center', scrollSnapAlign: 'center' }}>
-                  <img 
+                  <ProgressiveImage 
                     src={img} 
                     alt={`${title || 'Detail'} image ${i + 1}`} 
+                    containerStyle={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                     style={{ maxWidth: '100%', maxHeight: '310px', objectFit: 'contain', display: 'block', borderRadius: '8px' }}
                   />
                 </div>
@@ -166,9 +168,10 @@ const DetailModal = ({
               alignItems: 'center',
               padding: '0.5rem'
             }}>
-              <img 
+              <ProgressiveImage 
                 src={imageUrl} 
                 alt={title || 'Detail view'} 
+                containerStyle={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                 style={{ maxWidth: '100%', maxHeight: '310px', objectFit: 'contain', display: 'block', borderRadius: '8px' }}
               />
             </div>

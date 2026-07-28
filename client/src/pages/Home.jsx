@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, BookOpen, Users, Calendar, Briefcase, Cpu, ExternalLink, Link as LinkIcon } from 'lucide-react';
 import { getNews, getImageUrl, DEFAULT_IMAGE_PLACEHOLDER, getActivities, getLinks, getSettings } from '../services/api';
 import DetailModal from '../components/DetailModal';
+import ProgressiveImage from '../components/ProgressiveImage';
 import './Home.css';
 import './Page.css';
 import { Link, useLocation } from 'react-router-dom';
@@ -221,9 +222,10 @@ const Home = () => {
                 <div key={item._id || index} className="news-card card" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', padding: 0 }}>
                   {item.thumbnailUrl && (
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'center', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
-                      <img 
+                      <ProgressiveImage 
                         src={getImageUrl(item.thumbnailUrl)} 
                         alt={item.title} 
+                        containerStyle={{ width: '100%', display: 'flex', justifyContent: 'center' }}
                         style={{ width: '100%', height: 'auto', maxHeight: '250px', objectFit: 'contain', display: 'block' }} 
                       />
                     </div>
@@ -326,10 +328,12 @@ const Home = () => {
         <div className="container hod-grid">
           <div className="hod-image-wrapper">
             {settings?.hodPhotoUrl ? (
-              <img
+              <ProgressiveImage
                 src={getImageUrl(settings.hodPhotoUrl)}
                 alt="HOD"
                 className="hod-image"
+                fallbackType="avatar"
+                containerStyle={{ width: '100%', height: '100%', borderRadius: '1rem' }}
               />
             ) : (
               <div className="hod-image" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '1rem', minHeight: '260px' }}>
@@ -412,15 +416,12 @@ const Home = () => {
                   <div key={item._id || index} className="card glass animate-fade-in" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                     <div style={{ width: '100%', display: 'flex', overflowX: 'auto', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)', scrollSnapType: 'x mandatory' }}>
                       {(item.images && item.images.length > 0 ? item.images : [item.imageUrl]).map((imgUrl, i) => (
-                        <img 
+                        <ProgressiveImage 
                           key={i}
                           src={getImageUrl(imgUrl)} 
                           alt={`${item.title} ${i}`} 
-                          style={{ minWidth: '100%', height: '300px', objectFit: 'contain', display: 'block', flexShrink: 0, scrollSnapAlign: 'start' }} 
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
-                          }}
+                          containerStyle={{ minWidth: '100%', height: '300px', flexShrink: 0, scrollSnapAlign: 'start' }}
+                          style={{ width: '100%', height: '300px', objectFit: 'contain', display: 'block' }} 
                         />
                       ))}
                     </div>

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
+const { compressToWebP } = require('../utils/imageCompressor');
 
 const isSupabaseConfigured = () => {
   const url = process.env.SUPABASE_URL;
@@ -44,18 +45,26 @@ const saveToLocalUploads = async (buffer, filename) => {
 
 /**
  * Upload a file buffer to Supabase Storage or fallback to local disk storage.
+ * Automatically compresses images (JPEG/PNG/GIF/WebP) to WebP format before storage.
+ * 
  * @param {Buffer} buffer - File buffer from multer memoryStorage
  * @param {string} filename - Desired filename (unique)
  * @param {string} mimetype - File MIME type
  * @returns {Promise<string>} Public URL or relative path (/uploads/...) of the uploaded file
  */
 const uploadToSupabase = async (buffer, filename, mimetype) => {
+  // Compress image to WebP if mimetype is an image
+  const compressed = await compressToWebP(buffer, filename, mimetype);
+  const finalBuffer = compressed.buffer;
+  const finalFilename = compressed.filename;
+  const finalMimetype = compressed.mimetype;
+
   if (supabase) {
     try {
       const { data, error } = await supabase.storage
         .from(BUCKET_NAME)
-        .upload(filename, buffer, {
-          contentType: mimetype,
+        .upload(finalFilename, finalBuffer, {
+          contentType: finalMimetype,
           upsert: true,
         });
 
@@ -72,8 +81,9 @@ const uploadToSupabase = async (buffer, filename, mimetype) => {
   }
 
   // Fallback to local storage
-  return await saveToLocalUploads(buffer, filename);
+  return await saveToLocalUploads(finalBuffer, finalFilename);
 };
 
 module.exports = { supabase, uploadToSupabase, BUCKET_NAME };
+
 

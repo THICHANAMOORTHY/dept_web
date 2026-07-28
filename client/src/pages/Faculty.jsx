@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getFaculty, getFacultyAchievements, getImageUrl, DEFAULT_AVATAR, DEFAULT_IMAGE_PLACEHOLDER } from '../services/api';
 import { Mail, Book, Search, Trophy, Award, ArrowRight } from 'lucide-react';
 import DetailModal from '../components/DetailModal';
+import ProgressiveImage from '../components/ProgressiveImage';
 import './Page.css';
 
 const Faculty = () => {
@@ -120,14 +121,12 @@ const Faculty = () => {
             {filteredFaculty.length > 0 ? (
               filteredFaculty.map((faculty, index) => (
                 <div key={faculty._id || faculty.id || faculty.name || index} className="card glass faculty-card animate-fade-in">
-                  <img
+                  <ProgressiveImage
                     src={getImageUrl(faculty.imageUrl)}
                     alt={faculty.name}
                     className="faculty-image"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = DEFAULT_AVATAR;
-                    }}
+                    fallbackType="avatar"
+                    containerStyle={{ width: '120px', height: '120px', borderRadius: '50%', margin: '0 auto 1rem' }}
                   />
                   <h3>{faculty.name} {faculty.isHOD && '(HOD)'}</h3>
                   <p className="designation">{faculty.designation}</p>
@@ -180,19 +179,16 @@ const Faculty = () => {
                     position: 'relative'
                   }}>
                     {item.imageUrl ? (
-                      <img
+                      <ProgressiveImage
                         src={getImageUrl(item.imageUrl)}
                         alt={item.name}
+                        containerStyle={{ width: '100%', height: '100%' }}
                         style={{
                           maxWidth: '100%',
                           maxHeight: '100%',
                           objectFit: 'contain',
                           display: 'block',
                           borderRadius: '0.5rem'
-                        }}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
                         }}
                       />
                     ) : (

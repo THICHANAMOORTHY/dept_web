@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Beaker, ArrowRight } from 'lucide-react';
 import { getLabs, getImageUrl, getSettings } from '../services/api';
 import DetailModal from '../components/DetailModal';
+import ProgressiveImage from '../components/ProgressiveImage';
 import './Page.css';
 
 const Academics = () => {
@@ -240,7 +241,12 @@ const Academics = () => {
                   >
                     <div style={{ width: '100%', height: '180px', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', borderBottom: '1px solid var(--border-color)', padding: '1rem' }}>
                       {lab.imageUrl ? (
-                        <img src={getImageUrl(lab.imageUrl)} alt={lab.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                        <ProgressiveImage
+                          src={getImageUrl(lab.imageUrl)}
+                          alt={lab.name}
+                          containerStyle={{ width: '100%', height: '100%' }}
+                          style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                        />
                       ) : (
                         <div style={{ color: 'var(--primary)', opacity: 0.75, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
                           <Beaker size={48} />

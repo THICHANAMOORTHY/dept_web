@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Award, Calendar, Users, Trophy, ArrowRight } from 'lucide-react';
 import { getAchievements, getImageUrl, DEFAULT_IMAGE_PLACEHOLDER } from '../services/api';
 import DetailModal from '../components/DetailModal';
+import ProgressiveImage from '../components/ProgressiveImage';
 import './Page.css';
 
 const StudentAchievements = () => {
@@ -65,15 +66,12 @@ const StudentAchievements = () => {
                   <div key={item._id || item.id || index} className="achievement-card card glass" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                     {item.imageUrl && (
                       <div className="achievement-image-wrapper" style={{ width: '100%', height: '260px', overflow: 'hidden', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.5rem' }}>
-                        <img
+                        <ProgressiveImage
                           src={getImageUrl(item.imageUrl)}
                           alt={item.title}
                           className="achievement-image"
+                          containerStyle={{ width: '100%', height: '100%' }}
                           style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block', borderRadius: '0.5rem' }}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = DEFAULT_IMAGE_PLACEHOLDER;
-                          }}
                         />
                       </div>
                     )}
