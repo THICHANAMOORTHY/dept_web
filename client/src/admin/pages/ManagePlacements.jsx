@@ -3,7 +3,7 @@ import api, { getImageUrl, DEFAULT_IMAGE_PLACEHOLDER } from '../../services/api'
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
-import { Plus, X, Sparkles, Upload, Trash2 } from 'lucide-react';
+import { Plus, X, Sparkles, Trash2 } from 'lucide-react';
 
 const ManagePlacements = () => {
   const [placements, setPlacements] = useState([]);
@@ -105,7 +105,7 @@ const ManagePlacements = () => {
       data.append('removeBanner', 'true');
       data.append('title', highlightForm.title);
       data.append('text', highlightForm.text);
-      const res = await api.post('/admin/placement-highlight', data);
+      await api.post('/admin/placement-highlight', data);
       setCurrentHighlightUrl(null);
       setHighlightFile(null);
       alert('Placement Highlight banner removed successfully!');

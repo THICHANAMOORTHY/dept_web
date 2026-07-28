@@ -94,8 +94,8 @@ const changePassword = async (req, res) => {
   if (!currentPassword || !newPassword) {
     return res.status(400).json({ message: 'Both current and new passwords are required.' });
   }
-  if (newPassword.length < 6) {
-    return res.status(400).json({ message: 'New password must be at least 6 characters.' });
+  if (newPassword.length < 4) {
+    return res.status(400).json({ message: 'New password must be at least 4 characters.' });
   }
   try {
     // req.admin is set by protectAdmin middleware

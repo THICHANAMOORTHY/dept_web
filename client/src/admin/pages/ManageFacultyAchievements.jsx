@@ -3,7 +3,7 @@ import api, { getImageUrl, DEFAULT_AVATAR } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
-import { Plus, X, Award, Trophy } from 'lucide-react';
+import { Plus, X, Trophy } from 'lucide-react';
 
 const ManageFacultyAchievements = () => {
   const [achievements, setAchievements] = useState([]);

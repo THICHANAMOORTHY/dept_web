@@ -27,12 +27,12 @@ const ChangePassword = () => {
 
   const getStrength = (pwd) => {
     if (!pwd) return { level: 0, label: '', color: '#e5e7eb' };
-    if (pwd.length < 6) return { level: 1, label: 'Too short', color: '#ef4444' };
-    if (pwd.length < 8) return { level: 2, label: 'Weak', color: '#f97316' };
-    if (/[A-Z]/.test(pwd) && /[0-9]/.test(pwd) && pwd.length >= 10)
+    if (pwd.length < 4) return { level: 1, label: 'Too short', color: '#ef4444' };
+    if (pwd.length < 6) return { level: 2, label: 'Fair', color: '#f59e0b' };
+    if (/[A-Z]/.test(pwd) && /[0-9]/.test(pwd) && pwd.length >= 8)
       return { level: 4, label: 'Strong', color: '#22c55e' };
-    if (pwd.length >= 8) return { level: 3, label: 'Good', color: '#3b82f6' };
-    return { level: 2, label: 'Weak', color: '#f97316' };
+    if (pwd.length >= 6) return { level: 3, label: 'Good', color: '#3b82f6' };
+    return { level: 2, label: 'Fair', color: '#f59e0b' };
   };
 
   const strength = getStrength(formData.newPassword);
@@ -43,8 +43,8 @@ const ChangePassword = () => {
       setStatus({ type: 'error', message: 'New passwords do not match.' });
       return;
     }
-    if (formData.newPassword.length < 6) {
-      setStatus({ type: 'error', message: 'Password must be at least 6 characters.' });
+    if (formData.newPassword.length < 4) {
+      setStatus({ type: 'error', message: 'Password must be at least 4 characters.' });
       return;
     }
     setLoading(true);
@@ -73,7 +73,7 @@ const ChangePassword = () => {
     transition: 'border-color 0.2s',
   };
 
-  const PasswordField = ({ label, name, fieldKey }) => (
+  const PasswordField = ({ label, name, fieldKey, autoComplete }) => (
     <div style={{ marginBottom: '1.25rem' }}>
       <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '0.875rem', color: '#374151' }}>
         {label}
@@ -84,6 +84,7 @@ const ChangePassword = () => {
           name={name}
           value={formData[name]}
           onChange={handleChange}
+          autoComplete={autoComplete}
           required
           style={inputStyle}
           placeholder={`Enter ${label.toLowerCase()}`}
@@ -143,8 +144,8 @@ const ChangePassword = () => {
             {/* Divider */}
             <div style={{ height: '1px', backgroundColor: '#f3f4f6', marginBottom: '1.5rem' }} />
 
-            <PasswordField label="Current Password" name="currentPassword" fieldKey="current" />
-            <PasswordField label="New Password" name="newPassword" fieldKey="newPass" />
+            <PasswordField label="Current Password" name="currentPassword" fieldKey="current" autoComplete="current-password" />
+            <PasswordField label="New Password" name="newPassword" fieldKey="newPass" autoComplete="new-password" />
 
             {/* Password strength bar */}
             {formData.newPassword && (
@@ -162,7 +163,7 @@ const ChangePassword = () => {
               </div>
             )}
 
-            <PasswordField label="Confirm New Password" name="confirmPassword" fieldKey="confirm" />
+            <PasswordField label="Confirm New Password" name="confirmPassword" fieldKey="confirm" autoComplete="new-password" />
 
             {/* Match indicator */}
             {formData.confirmPassword && (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, Award, BookOpen, Users, Calendar, Briefcase, Cpu, ExternalLink, Link as LinkIcon } from 'lucide-react';
+import { ArrowRight, BookOpen, Users, Calendar, Briefcase, Cpu, ExternalLink, Link as LinkIcon } from 'lucide-react';
 import { getNews, getImageUrl, DEFAULT_IMAGE_PLACEHOLDER, getActivities, getLinks, getSettings } from '../services/api';
 import DetailModal from '../components/DetailModal';
 import './Home.css';

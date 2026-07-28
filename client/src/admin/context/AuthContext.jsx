@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
         } else {
           setIsAuthenticated(true);
         }
-      } catch (e) {
+      } catch {
         logout();
       }
     } else {
