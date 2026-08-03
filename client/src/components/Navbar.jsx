@@ -16,6 +16,7 @@ const Navbar = () => {
     { name: 'Faculty', path: '/faculty' },
     { name: 'Student Achievements', path: '/student-achievements' },
     { name: 'Placements', path: '/placements' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   const isActive = (linkPath) => {

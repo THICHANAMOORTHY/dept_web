@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api, { getImageUrl } from '../../services/api';
+import api, { getImageUrl, DEFAULT_IMAGE_PLACEHOLDER } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -53,7 +53,7 @@ const ManageActivities = () => {
   };
 
   const columns = [
-    { header: 'Image', accessor: 'imageUrl', render: (row) => <img src={getImageUrl(row.imageUrl)} alt="thumb" style={{ width: '80px', height: '50px', objectFit: 'cover', borderRadius: '4px' }} /> },
+    { header: 'Image', accessor: 'imageUrl', render: (row) => <img src={getImageUrl(row.imageUrl)} alt="thumb" style={{ width: '80px', height: '50px', objectFit: 'cover', borderRadius: '4px' }} onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_IMAGE_PLACEHOLDER; }} /> },
     { header: 'Title', accessor: 'title' },
     { header: 'Category', accessor: 'category' }
   ];

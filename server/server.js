@@ -55,6 +55,7 @@ const settingsRoutes = require('./routes/settings.routes');
 const labRoutes = require('./routes/lab.routes');
 const linkRoutes = require('./routes/link.routes');
 const facultyAchievementRoutes = require('./routes/facultyAchievement.routes');
+const enquiryRoutes = require('./routes/enquiry.routes');
 
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/news', newsRoutes);
@@ -66,6 +67,7 @@ app.use('/api/settings', settingsRoutes);
 app.use('/api/labs', labRoutes);
 app.use('/api/links', linkRoutes);
 app.use('/api/faculty-achievements', facultyAchievementRoutes);
+app.use('/api/enquiries', enquiryRoutes); // public: POST for contact form submissions
 
 app.get('/', (req, res) => {
   res.send('API is running...');

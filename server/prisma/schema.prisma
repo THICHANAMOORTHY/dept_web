@@ -22,7 +22,7 @@ model Faculty {
   qualification     String
   specialization    String
   email             String
-  imageUrl          String?  @default("https://via.placeholder.com/150")
+  imageUrl          String?
   publications      String[]
   researchInterests String[]
   isHOD             Boolean  @default(false)
@@ -76,7 +76,7 @@ model Placement {
   package        String
   year           Int
   studentsPlaced Int
-  logoUrl        String?  @default("https://via.placeholder.com/100")
+  logoUrl        String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }

@@ -112,6 +112,7 @@ const ManageFacultyAchievements = () => {
           src={row.imageUrl ? getImageUrl(row.imageUrl) : DEFAULT_AVATAR}
           alt={row.name}
           style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }}
+          onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
         />
       )
     },

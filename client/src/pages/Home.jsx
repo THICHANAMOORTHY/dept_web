@@ -115,7 +115,7 @@ const Home = () => {
       {/* Hero Section */}
       <section
         className="hero-section"
-        style={settings?.heroBannerUrl ? {
+        style={settings?.heroBannerUrl && getImageUrl(settings.heroBannerUrl) && !getImageUrl(settings.heroBannerUrl).startsWith('data:image/svg+xml') ? {
           '--hero-bg-url': `url('${getImageUrl(settings.heroBannerUrl)}')`
         } : {}}
       >

@@ -116,7 +116,7 @@ const ManagePlacements = () => {
   };
 
   const columns = [
-    { header: 'Image', accessor: 'logoUrl', render: (row) => <img src={row.logoUrl ? getImageUrl(row.logoUrl) : DEFAULT_IMAGE_PLACEHOLDER} alt="placement photo" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '6px' }} /> },
+    { header: 'Image', accessor: 'logoUrl', render: (row) => <img src={row.logoUrl ? getImageUrl(row.logoUrl) : DEFAULT_IMAGE_PLACEHOLDER} alt="placement photo" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '6px' }} onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_IMAGE_PLACEHOLDER; }} /> },
     { header: 'Company / Title', accessor: 'company' },
     { header: 'Year', accessor: 'year' },
   ];

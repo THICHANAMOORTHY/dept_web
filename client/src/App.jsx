@@ -6,6 +6,7 @@ import Faculty from './pages/Faculty';
 import Academics from './pages/Academics';
 import Placements from './pages/Placements';
 import StudentAchievements from './pages/StudentAchievements';
+import Contact from './pages/Contact';
 
 // Admin imports
 import { AuthProvider } from './admin/context/AuthContext';
@@ -53,6 +54,7 @@ function App() {
             <Route path="/faculty" element={<Faculty />} />
             <Route path="/student-achievements" element={<StudentAchievements />} />
             <Route path="/placements" element={<Placements />} />
+            <Route path="/contact" element={<Contact />} />
           </Route>
 
           {/* Admin Routes */}

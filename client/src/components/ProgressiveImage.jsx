@@ -24,8 +24,13 @@ const ProgressiveImage = ({
 
   // Reset state when src changes
   useEffect(() => {
-    setIsLoaded(false);
-    setHasError(false);
+    if (!src || typeof src !== 'string' || !src.trim()) {
+      setHasError(true);
+      setIsLoaded(true);
+    } else {
+      setIsLoaded(false);
+      setHasError(false);
+    }
   }, [src]);
 
   const handleImageLoad = (e) => {

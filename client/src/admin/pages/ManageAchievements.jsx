@@ -61,7 +61,7 @@ const ManageAchievements = () => {
   };
 
   const columns = [
-    { header: 'Image', accessor: 'imageUrl', render: (row) => <img src={row.imageUrl ? getImageUrl(row.imageUrl) : DEFAULT_IMAGE_PLACEHOLDER} alt="achievement" style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} /> },
+    { header: 'Image', accessor: 'imageUrl', render: (row) => <img src={row.imageUrl ? getImageUrl(row.imageUrl) : DEFAULT_IMAGE_PLACEHOLDER} alt="achievement" style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_IMAGE_PLACEHOLDER; }} /> },
     { header: 'Achievement Title', accessor: 'title' },
     { header: 'Year', accessor: 'year' },
     { header: 'Students', accessor: 'studentNames', render: (row) => row.studentNames?.join(', ') }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api, { getImageUrl } from '../../services/api';
+import api, { getImageUrl, DEFAULT_AVATAR } from '../../services/api';
 import DataTable from '../components/DataTable';
 import ImageUploader from '../components/ImageUploader';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
@@ -107,7 +107,7 @@ const ManageFaculty = () => {
     {
       header: 'Photo',
       accessor: 'imageUrl',
-      render: (row) => <img src={getImageUrl(row.imageUrl)} alt={row.name} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+      render: (row) => <img src={getImageUrl(row.imageUrl)} alt={row.name} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} />
     },
     { header: 'Name', accessor: 'name' },
     { header: 'Designation', accessor: 'designation' },
